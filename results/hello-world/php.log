@@ -1,0 +1,53 @@
+This is ApacheBench, Version 2.3 <$Revision: 1706008 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+Completed 20000 requests
+Completed 30000 requests
+Completed 40000 requests
+Completed 50000 requests
+Completed 60000 requests
+Completed 70000 requests
+Completed 80000 requests
+Completed 90000 requests
+Completed 100000 requests
+Finished 100000 requests
+
+
+Server Software:        Apache
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /load-testing/hello-world.php
+Document Length:        12 bytes
+
+Concurrency Level:      10
+Time taken for tests:   3.283 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      16300000 bytes
+HTML transferred:       1200000 bytes
+Requests per second:    30462.25 [#/sec] (mean)
+Time per request:       0.328 [ms] (mean)
+Time per request:       0.033 [ms] (mean, across all concurrent requests)
+Transfer rate:          4848.97 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:     0    0   0.1      0       4
+Waiting:        0    0   0.1      0       4
+Total:          0    0   0.1      0       5
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      0
+  80%      0
+  90%      0
+  95%      0
+  98%      0
+  99%      0
+ 100%      5 (longest request)
