@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
+# OVERRIDE: Don't quit on fail as some ab commands fail due to server
+# set -e
 
 cd "$(dirname "$0")"
 
