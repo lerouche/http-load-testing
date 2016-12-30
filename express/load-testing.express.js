@@ -30,13 +30,13 @@ app.get('/hmac', (req, res) => {
 app.get('/db-get', (req, res) => {
 	var db = mysql.createConnection({
 		host: 'localhost',
-		user: 'zentrumcore',
-		password: '6huDyIGVW6kNP9x45bc+vTb398OX0lCnIWRHusgWubo=',
-		database: 'zentrumcore'
+		user: 'loadtesting',
+		password: 'loadtesting',
+		database: 'loadtesting'
 	});
 
 	db.connect();
-	db.query('SELECT HEX(ipAddress), rateLimitCount, rateLimitTimeWindow FROM _ip_tracker', (err, rows) => {
+	db.query('SELECT HEX(hexId), incrementValue, textField FROM `table1`', (err, rows) => {
 		if (err) {
 			res.status(500);
 			res.send('');
@@ -56,13 +56,13 @@ app.get('/db-get', (req, res) => {
 app.get('/db-set', (req, res) => {
 	var db = mysql.createConnection({
 		host: 'localhost',
-		user: 'zentrumcore',
-		password: '6huDyIGVW6kNP9x45bc+vTb398OX0lCnIWRHusgWubo=',
-		database: 'zentrumcore'
+		user: 'loadtesting',
+		password: 'loadtesting',
+		database: 'loadtesting'
 	});
 
 	db.connect();
-	db.query('UPDATE _ip_tracker SET rateLimitCount = rateLimitCount + 1', (err) => {
+	db.query('UPDATE `table1` SET incrementValue = incrementValue + 1', (err) => {
 		if (err) {
 			res.status(500);
 		} else {

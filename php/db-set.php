@@ -2,13 +2,13 @@
 
 require '__inc_show_errors.php';
 
-$db = new mysqli('localhost', 'zentrumcore', '6huDyIGVW6kNP9x45bc+vTb398OX0lCnIWRHusgWubo=', 'zentrumcore');
+$db = new mysqli('localhost', 'loadtesting', 'loadtesting', 'loadtesting');
 if ($db->connect_errno) {
     http_response_code(500);
     die();
 }
 
-$dbq = $db->query('UPDATE _ip_tracker SET rateLimitCount = rateLimitCount + 1');
+$dbq = $db->query('UPDATE `table1` SET incrementValue = incrementValue + 1');
 if (!$dbq) {
     http_response_code(500);
     die();

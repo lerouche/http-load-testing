@@ -2,13 +2,13 @@
 
 require '__inc_show_errors.php';
 
-$db = new mysqli('localhost', 'zentrumcore', '6huDyIGVW6kNP9x45bc+vTb398OX0lCnIWRHusgWubo=', 'zentrumcore');
+$db = new mysqli('localhost', 'loadtesting', 'loadtesting', 'loadtesting');
 if ($db->connect_errno) {
     http_response_code(500);
     die();
 }
 
-$dbq = $db->query('SELECT HEX(ipAddress), rateLimitCount, rateLimitTimeWindow FROM _ip_tracker');
+$dbq = $db->query('SELECT HEX(hexId), incrementValue, textField FROM `table1`');
 if (!$dbq) {
     http_response_code(500);
     die();

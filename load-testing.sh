@@ -5,6 +5,8 @@
 
 cd "$(dirname "$0")"
 
+mkdir -p results/hello-world results/json results/hmac results/db-get results/db-set
+
 ab -c10 -n100000 -r 'http://localhost/load-testing/hello-world.php' &> results/hello-world/php.log
 ab -c10 -n100000 -r 'http://localhost:1500/hello-world' &> results/hello-world/openresty.log
 ab -c10 -n100000 -r 'http://localhost:3000/hello-world' &> results/hello-world/express.log
