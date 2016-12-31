@@ -59,7 +59,7 @@ let html = `
                     height: 50px;
                     line-height: 50px;
 
-                    white-space: no-wrap;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
