@@ -34,12 +34,53 @@ let html = `
     <html>
         <head>
             <title>Here are your results</title>
+
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+            <style>
+                #title, #background {
+                    box-sizing: border-box;
+                }
+                #chart-requests, #chart-errors {
+                    margin: 0 auto;
+                    width: calc(100% - 40px);
+                }
+                body {
+                    margin: 0;
+                    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Ubuntu, Cantarell, Oxygen, Droid Sans, Fira Sans, sans-serif;
+                }
+                #title {
+                    background: rgb(0, 49, 100);
+                    color: white;
+                    font-size: 24px;
+                    font-weight: 400;
+
+                    margin: 0;
+                    padding: 0 12px;
+                    height: 50px;
+                    line-height: 50px;
+
+                    white-space: no-wrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                #controls {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    align-items: center;
+                    height: 30px;
+                    padding: 0 10px;
+                }
+            </style>
+
             <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
         </head>
 
-        <body>`;
+        <body onresize="resizeChart()" onorientationchange="resizeChart()">
+            <h1 id="title">Load testing on </h1>
+            <div id="controls">
+                <button onclick="normaliseChart()">Normalise</button>
+            </div>`;
 
 (function() {
     let chartColumns = [];
@@ -65,7 +106,15 @@ let html = `
     html += `
         <div id="chart-requests"></div>
         <script>
-            c3.generate({
+            function resizeChart() {
+                requestsChart.resize({
+                    height: document.documentElement.clientHeight - 80,
+                });
+            }
+            function normaliseChart() {
+                requestsChart.axis.max(30000);
+            }
+            var requestsChart = c3.generate({
                 bindto: '#chart-requests',
                 data: {
                     x: 'testNames',
@@ -85,6 +134,7 @@ let html = `
                     }
                 },
             });
+            setTimeout(resizeChart, 1000);
         </script>
     `;
 })();
@@ -113,7 +163,7 @@ let html = `
     html += `
         <div id="chart-errors"></div>
         <script>
-            c3.generate({
+            var errorsChart = c3.generate({
                 bindto: '#chart-errors',
                 data: {
                     x: 'testNames',
