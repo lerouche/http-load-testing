@@ -29,7 +29,7 @@ let systemLoadData = [];
         systemLoadData.push({
             timestamp: timeStarted + (1000 * lineNo),
             totalCpuUsage: Number.parseFloat(parts[0]),
-            memoryUsage: Number.parseFloat(parts[1]),
+            memoryUsage: Number.parseFloat(parts[6]) / 1024 / 1024,
         });
     });
 })();
@@ -46,11 +46,14 @@ fs.readdirSync(__dirname + '/results').forEach(testName => {
         let file = fs.readFileSync(`${__dirname}/results/${testName}/${testSubject}.log`, {encoding: 'utf8'});
         let regexpMatches;
 
-        regexpMatches = /^Transaction rate:\s+([0-9.]+)/m.exec(file);
+        regexpMatches = /^Requests per second:\s+([0-9.]+)/m.exec(file);
         let requestsPerSecond = (regexpMatches && regexpMatches[1]) | 0; // Will be zero if not found
 
-        regexpMatches = /^Failed transactions:\s+([0-9]+)/m.exec(file);
+        regexpMatches = /^Non-2xx responses:\s+([0-9]+)/m.exec(file);
         let totalErrors = (regexpMatches && regexpMatches[1]) | 0; // Will be zero if not found
+
+        regexpMatches = /^Failed requests:\s+([0-9]+)/m.exec(file);
+        totalErrors += (regexpMatches && regexpMatches[1]) | 0; // Will be zero if not found
 
         results[testSubject] = requestsPerSecond;
         currentTestErrors[testSubject] = totalErrors;
@@ -253,7 +256,6 @@ html += '</main>';
 
 Object.keys(times).forEach(function(test) {
     let timeData = times[test];
-    let graphTimeTicksCount = 0;
     let cpuChartColumns = [];
     let memoryChartColumns = [];
     Object.keys(timeData).forEach(function(subject) {
@@ -277,18 +279,15 @@ Object.keys(times).forEach(function(test) {
         let relevantSystemLoadData = systemLoadData.slice(systemLoadDataStart, systemLoadDataEnd + 1);
 
         let ticksCount = systemLoadDataEnd - systemLoadDataStart + 1;
-        if (ticksCount > graphTimeTicksCount) {
-            graphTimeTicksCount = ticksCount;
-        }
 
         cpuChartColumns.push([
             subject,
-            ...Array(graphTimeTicksCount).fill(0).map((_, idx) => idx < relevantSystemLoadData.length ? relevantSystemLoadData[idx].totalCpuUsage : 0),
+            ...relevantSystemLoadData.map(d => d.totalCpuUsage),
         ]);
 
         memoryChartColumns.push([
             subject,
-            ...Array(graphTimeTicksCount).fill(0).map((_, idx) => idx < relevantSystemLoadData.length ? relevantSystemLoadData[idx].memoryUsage : 0),
+            ...relevantSystemLoadData.map(d => d.memoryUsage),
         ]);
     });
     [cpuChartColumns, memoryChartColumns] = [cpuChartColumns, memoryChartColumns].map(c => JSON.stringify(c));

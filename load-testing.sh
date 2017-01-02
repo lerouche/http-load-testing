@@ -57,8 +57,8 @@ do
         printf "$SUBJECT..."
 
         SUBJECT_TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
-        # ab -c1000 -n10000 -r "$URL" &> "results/$TEST/$SUBJECT.log"
-        siege -c100 -b -r100 -l/dev/null "$URL" &> "results/$TEST/$SUBJECT.log"
+        ab -c1000 -n500000 -r "$URL" &> "results/$TEST/$SUBJECT.log"
+        # siege -c1000 -b -r100 -l/dev/null "$URL" &> "results/$TEST/$SUBJECT.log"
         SUBJECT_TIMESTAMP_ENDED=$(($(date +%s%N)/1000000))
         echo "$SUBJECT;$SUBJECT_TIMESTAMP_STARTED;$SUBJECT_TIMESTAMP_ENDED" >> times.log
         
@@ -69,7 +69,6 @@ do
 done
 
 kill $DSTAT_PID
-wait $DSTAT_PID &>/dev/null
 
 node generate-report.js
 xdg-open ./report.html &>/dev/null &
