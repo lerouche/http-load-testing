@@ -1,5 +1,7 @@
 node_modules/
 /report.html
+/report.json
+/system.info
 /times.log
 /system-load.csv
 /results/
