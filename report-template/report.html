@@ -122,6 +122,7 @@
                 })));
 
                 location.hash = '#overview';
+                $( '#nav-list > li[data-id="overview"]' ).addClass('active');
 
                 $(window).on('resize orientationchange', resizeCharts);
                 setTimeout(resizeCharts, 1000);
