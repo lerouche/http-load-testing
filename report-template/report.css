@@ -139,6 +139,9 @@ nav {
 
         z-index: 100;
     }
+    #nav-tests-list.open {
+        cursor: default;
+    }
     #nav-tests-list > li {
         height: 24px;
         line-height: 24px;

@@ -46,27 +46,17 @@
                         .append('<li data-id="test-' + testName.toLowerCase().replace(/ /g, '-') + '">' + testName + '</li>');
                 });
 
-                $( '#nav-list > li[data-id]' )
-                    .on('click', function() {
-                        location.hash = '#' + this.dataset.id;
-                        $( '#nav-list li.active' ).add(this).toggleClass('active');
-                    });
-
-                $( document )
-                    .on('click', function() {
-                        $( '#nav-tests-list' ).removeClass('open');
+                $( '#nav-list' )
+                    .on('click', 'li[data-id]', function() {
+                        if (!this.classList.contains('active')) {
+                            location.hash = '#' + this.dataset.id;
+                            $('#nav-list li.active').add(this).toggleClass('active');
+                        }
                     });
 
                 $( '#nav-tests-list-container' )
-                    .on('click', function(e) {
-                        e.stopPropagation();
+                    .on('click', function() {
                         $( '#nav-tests-list' ).toggleClass('open');
-                    })
-                    .on('click', 'li', function() {
-                        if (!this.classList.contains('active')) {
-                            $(this).siblings('.active').addBack().toggleClass('active');
-                            location.hash = '#' + this.dataset.id;
-                        }
                     });
 
                 Object.keys(json.errors).forEach(function(test) {
