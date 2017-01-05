@@ -16,9 +16,9 @@ SUBJECTS[0]='Express'
 SUBJECTS[1]='PHP'
 SUBJECTS[2]='OpenResty'
 
-SUBJECT_URL_PATHS[0]=':3000/${TEST}'
+SUBJECT_URL_PATHS[0]=':1025/${TEST}'
 SUBJECT_URL_PATHS[1]='/load-testing/${TEST}.php'
-SUBJECT_URL_PATHS[2]=':1500/${TEST}'
+SUBJECT_URL_PATHS[2]=':1027/${TEST}'
 
 rm -rf results
 rm -f system-load.csv

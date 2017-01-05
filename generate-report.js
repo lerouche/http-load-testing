@@ -304,13 +304,13 @@ function main() {
 
     fs.writeFileSync(__dirname + '/report.json', JSON.stringify(json));
 
-    require('zcompile')({
+    require(__dirname + '/report-template/node_modules/zcompile/src/zc.js')({
         src: __dirname + '/report-template',
         dst: __dirname + '/',
 
         files: ['report.html'],
-        minifyHtmlJS: true,
-        minifyHtmlCSS: true,
+        // minifyHtmlJS: true,
+        // minifyHtmlCSS: true,
     });
 
     fs.unlinkSync(__dirname + '/report.json');
