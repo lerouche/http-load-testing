@@ -6,21 +6,20 @@ const express = require('express');
 const crypto = require('crypto');
 const mysql = require('mysql');
 
-const ARGS = process.argv.slice(2);
-const PID_FILE = ARGS.find(arg => /^--pid=/.test(arg));
-
-if (PID_FILE) {
-    fs.writeFileSync(PID_FILE.slice(6), process.pid);
-}
-
 if (cluster.isMaster) {
     for (let i = 0; i < CPU_CORES; i++) {
         cluster.fork();
     }
 
-    cluster.on("exit", function (worker, code, signal) {
-        console.log('Worker %d died with code/signal %s. Restarting worker...', worker.process.pid, signal || code);
-        cluster.fork();
+    const ARGS = process.argv.slice(2);
+    const PID_FILE = ARGS.find(arg => /^--pid=/.test(arg));
+
+    if (PID_FILE) {
+        fs.writeFileSync(PID_FILE.slice(6), process.pid);
+    }
+
+    cluster.on('exit', function (worker, code, signal) {
+        console.log('Worker %d died with code/signal %s', worker.process.pid, signal || code);
     });
 } else {
     let app = express();

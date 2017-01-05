@@ -19,6 +19,6 @@ read -n 1 -s -p $'Press any key at any time to terminate\n'
 
 kill -QUIT $(head -n 1 dist/logs/nginx.pid)
 # kill $(head -n 1 dist/logs/hhvm.pid)
-kill $(head -n 1 dist/logs/express.pid)
+kill -QUIT $(head -n 1 dist/logs/express.pid)
 
 exit 0
