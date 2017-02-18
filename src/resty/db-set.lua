@@ -10,7 +10,7 @@ local ok, err = db:connect{
 }
 if not ok then
     ngx.status = 500
-    ngx.say('')
+    ngx.say(err)
     return
 end
 

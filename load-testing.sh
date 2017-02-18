@@ -13,11 +13,12 @@ TESTS[3]='db-get'
 TESTS[4]='db-set'
 
 SUBJECTS[0]='Express'
-SUBJECTS[1]='PHP'
+SUBJECTS[1]='HHVM'
 SUBJECTS[2]='OpenResty'
 
 SUBJECT_URL_PATHS[0]=':1025/${TEST}'
-SUBJECT_URL_PATHS[1]='/load-testing/${TEST}.php'
+#SUBJECT_URL_PATHS[1]='/load-testing/${TEST}.php'
+SUBJECT_URL_PATHS[1]=':1026/${TEST}.php'
 SUBJECT_URL_PATHS[2]=':1027/${TEST}'
 
 rm -rf results
@@ -61,7 +62,7 @@ do
         printf "$SUBJECT..."
 
         SUBJECT_TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
-        ab -c1000 -n500000 -k -l -r "$URL" &> "results/$TEST/$SUBJECT.log"
+        ab -c1000 -n500000 -q -r "$URL" &> "results/$TEST/$SUBJECT.log"
         SUBJECT_TIMESTAMP_ENDED=$(($(date +%s%N)/1000000))
         echo "$SUBJECT;$SUBJECT_TIMESTAMP_STARTED;$SUBJECT_TIMESTAMP_ENDED" >> times.log
 

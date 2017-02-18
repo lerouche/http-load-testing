@@ -87,12 +87,14 @@ function main() {
 
     let chartColors = {
         Sleep: '#ccc',
-        PHP: '#2a5696',
+        // PHP: '#2a5696',
+        HHVM: '#2a5696',
         Express: '#1d7044',
         OpenResty: '#d14424',
     };
 
-    let chartColumnOrder = ['Express', 'PHP', 'OpenResty'];
+    // let chartColumnOrder = ['Express', 'PHP', 'OpenResty'];
+    let chartColumnOrder = ['Express', 'HHVM', 'OpenResty'];
     let sortChartColumns = function (cols) {
         cols.sort((colA, colB) => {
             let a = chartColumnOrder.indexOf(colA[0]);

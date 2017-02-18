@@ -1,6 +1,6 @@
 <?php
 
-require '__inc_show_errors.php';
+//require '__inc_show_errors.php';
 
 $db = new mysqli('p:127.0.0.1', 'loadtesting', 'loadtesting', 'loadtesting');
 if ($db->connect_errno) {

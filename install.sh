@@ -76,20 +76,21 @@ rm -rf openresty/
 rm -rf "$DST/conf/"
 mkdir -p "$DST/conf/"
 cp conf/* "$DST/conf/"
-sed -i "s@<COMPILE_PARAM_HHVM_DOCROOT>@$DST/app/php/@" "$DST/conf/nginx-hhvm.conf"
 
 cd "$SRC"
 
 HHVM_INI_FILE="$DST/conf/hhvm.ini"
+HHVM_FILE_SOCKET="$DST/logs/hhvm.sock"
 
-# php options
+#sed -i "s@<COMPILE_PARAM_HHVM_DOCROOT>@$DST/app/php/@" "$DST/conf/nginx-hhvm.conf"
+#sed -i "s@<COMPILE_PARAM_HHVM_FILE_SOCKET>@$HHVM_FILE_SOCKET@" "$DST/conf/nginx-hhvm.conf"
 
 echo "pid = $DST/logs/hhvm.pid" >> "$HHVM_INI_FILE"
-
-# hhvm specific
-
-echo "hhvm.server.port = 9000" >> "$HHVM_INI_FILE"
-echo "hhvm.server.type = fastcgi" >> "$HHVM_INI_FILE"
+#echo "hhvm.server.file_socket = $HHVM_FILE_SOCKET" >> "$HHVM_INI_FILE"
+#echo "hhvm.server.type = fastcgi" >> "$HHVM_INI_FILE"
+echo "hhvm.server.port = 1026" >> "$HHVM_INI_FILE"
+echo "hhvm.server.type = proxygen" >> "$HHVM_INI_FILE"
+echo "hhvm.server.thread_count = 10000" >> "$HHVM_INI_FILE"
 
 echo "hhvm.server.default_document = index.php" >> "$HHVM_INI_FILE"
 echo "hhvm.server.exit_on_bind_fail = true" >> "$HHVM_INI_FILE"
@@ -100,6 +101,10 @@ echo "hhvm.log.file = $DST/logs/hhvm-error.log" >> "$HHVM_INI_FILE"
 #echo "hhvm.log.level = Verbose" >> "$HHVM_INI_FILE"
 echo "hhvm.repo.authoritative = true" >> "$HHVM_INI_FILE"
 echo "hhvm.repo.central.path = $DST/app/hhvm.hhbc" >> "$HHVM_INI_FILE"
+echo "hhvm.server.source_root = $DST/app/php/" >> "$HHVM_INI_FILE"
+
+echo "mysqli.allow_persistent = true" >> "$HHVM_INI_FILE"
+echo "mysqli.max_persistent = 0" >> "$HHVM_INI_FILE"
 
 mkdir -p "$DST/app/resty/"
 mkdir -p "$DST/app/express/"
@@ -115,9 +120,7 @@ rm php-index.tmp
 cd "$ORIG_DIR"
 
 export PATH="$(realpath "$ORIG_DIR/dist/bin"):$PATH"
-#export LD_LIBRARY_PATH="$(realpath dist/luajit/lib):$LD_LIBRARY_PATH"
 
-#opm get bungle/lua-resty-nettle
 opm get jkeys089/lua-resty-hmac
 
 cd "$DST/app/express"
