@@ -2,6 +2,8 @@
 
 set -e
 
+# Get CPU cores
+
 CPU_CORE_COUNT=$(nproc --all)
 echo "CPU cores: $CPU_CORE_COUNT"
 
@@ -18,26 +20,30 @@ if [ "$1" == "dep" ]
         fi
 fi
 
+# Remember script directory
+
 ORIG_DIR="$(dirname "$0")"
 ORIG_DIR="$(realpath "$ORIG_DIR")"
 cd "$ORIG_DIR"
 
 SRC="$(realpath ./src/)"
 
+# Prepare destination folder
+
 DST="./dist/"
 rm -rf "$DST"
 mkdir -p "$DST"
 DST="$(realpath "$DST")"
 
+# Prepare to build OpenResty
+
 cd "$SRC/nginx"
-
 rm -rf openresty/
-
 tar -zvxf openresty-1.11.2.2.tar.gz
-
 mv openresty-1.11.2.2/ openresty/
-
 cp __patches/* openresty/bundle/nginx-1.11.2/src/http/
+
+# Build OpenResty
 
 cd openresty
 # WARNING: FastCGI module is needed for HHVM
@@ -70,12 +76,15 @@ cd openresty
 make -j$CPU_CORE_COUNT
 make install
 cd ..
-
 rm -rf openresty/
+
+# Copy configuration
 
 rm -rf "$DST/conf/"
 mkdir -p "$DST/conf/"
 cp conf/* "$DST/conf/"
+
+# Copy code for OpenResty and Node.js
 
 cd "$SRC"
 
@@ -84,15 +93,24 @@ mkdir -p "$DST/app/express/"
 cp resty/* "$DST/app/resty/"
 cp express/* "$DST/app/express/"
 
+# Install dependencies for OpenResty and Node.js
+
 cd "$ORIG_DIR"
 
 export PATH="$(realpath "$ORIG_DIR/dist/bin"):$PATH"
-
 opm get jkeys089/lua-resty-hmac
 
 cd "$DST/app/express"
 npm install
 rm package.json
+
+cd "$ORIG_DIR"
+
+# Compile HHVM code
+
+./install.hack.sh
+
+# Finish
 
 cd "$ORIG_DIR"
 

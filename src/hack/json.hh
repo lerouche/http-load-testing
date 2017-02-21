@@ -1,6 +1,4 @@
-<?php
-
-//require '__inc_show_errors.php';
+<?hh
 
 echo json_encode([
 	'message' => 'Hello world!',
