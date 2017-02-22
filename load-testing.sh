@@ -4,7 +4,35 @@ set -e
 
 cd "$(dirname "$0")"
 
+KEEPALIVE_ARG=""
+CONCURRENCY_ARG="-c1000"
 SLEEP_DURATION=60
+
+while [[ $# -gt 0 ]]; do
+	ARG=$1
+
+	case $ARG in
+		-k|--keepalive)
+			KEEPALIVE_ARG="-k"
+			;;
+
+		-c|--concurrency)
+			CONCURRENCY_ARG="-c$2"
+			shift
+			;;
+            
+        -s|--sleep)
+            SLEEP_DURATION="$2"
+            shift
+            ;;
+
+		*)
+			echo "Unrecognised argument \"$ARG\""
+			exit 1
+			;;
+	esac
+	shift
+done
 
 TESTS[0]='hello-world'
 TESTS[1]='json'
@@ -56,7 +84,7 @@ do
         printf "$SUBJECT..."
 
         SUBJECT_TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
-        ab -c1000 -n500000 -q -l -r "$URL" &> "results/$TEST/$SUBJECT.log"
+        ab $CONCURRENCY_ARG -n500000 $KEEPALIVE_ARG -q -l -r "$URL" &> "results/$TEST/$SUBJECT.log"
         SUBJECT_TIMESTAMP_ENDED=$(($(date +%s%N)/1000000))
         echo "$SUBJECT;$SUBJECT_TIMESTAMP_STARTED;$SUBJECT_TIMESTAMP_ENDED" >> times.log
 
