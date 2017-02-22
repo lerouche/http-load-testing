@@ -9,29 +9,29 @@ CONCURRENCY_ARG="-c1000"
 SLEEP_DURATION=60
 
 while [[ $# -gt 0 ]]; do
-	ARG=$1
+    ARG=$1
 
-	case $ARG in
-		-k|--keepalive)
-			KEEPALIVE_ARG="-k"
-			;;
+    case $ARG in
+        -k|--keepalive)
+            KEEPALIVE_ARG="-k"
+            ;;
 
-		-c|--concurrency)
-			CONCURRENCY_ARG="-c$2"
-			shift
-			;;
-            
+        -c|--concurrency)
+            CONCURRENCY_ARG="-c$2"
+            shift
+            ;;
+
         -s|--sleep)
             SLEEP_DURATION="$2"
             shift
             ;;
 
-		*)
-			echo "Unrecognised argument \"$ARG\""
-			exit 1
-			;;
-	esac
-	shift
+        *)
+            echo "Unrecognised argument \"$ARG\""
+            exit 1
+            ;;
+    esac
+    shift
 done
 
 TESTS[0]='hello-world'
