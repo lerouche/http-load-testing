@@ -9,7 +9,7 @@ if [[ $EUID -eq 0 ]]; then
 fi
 
 sudo apt update
-sudo apt install -y curl software-properties-common wget
+sudo apt install -y git curl software-properties-common wget
 
 curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo add-apt-repository -y ppa:ondrej/php
@@ -18,7 +18,7 @@ sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e72
 sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 
 sudo apt update
-sudo apt -y dist-upgrade
+sudo apt dist-upgrade -y
 
 sudo apt install -y \
     libreadline-dev \
