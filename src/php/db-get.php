@@ -1,7 +1,5 @@
 <?php
 
-//require '__inc_show_errors.php';
-
 $db = new mysqli('p:127.0.0.1', 'loadtesting', 'loadtesting', 'loadtesting');
 if ($db->connect_errno) {
     http_response_code(500);
@@ -14,14 +12,6 @@ if (!$dbq) {
     die();
 }
 
-$data = [];
-while ($dbd = $dbq->fetch_assoc()) {
-    $data[] = $dbd;
-}
-
-if (!$db->close()) {
-    http_response_code(500);
-    die();
-}
+$data = $dbq->fetch_all(MYSQLI_ASSOC);
 
 echo json_encode($data);

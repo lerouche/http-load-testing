@@ -4,7 +4,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-SLEEP_DURATION=5
+SLEEP_DURATION=60
 
 TESTS[0]='hello-world'
 TESTS[1]='json'
@@ -13,13 +13,14 @@ TESTS[3]='db-get'
 TESTS[4]='db-set'
 
 SUBJECTS[0]='Express'
-SUBJECTS[1]='HHVM'
-SUBJECTS[2]='OpenResty'
+SUBJECTS[1]='PHP'
+SUBJECTS[2]='HHVM'
+SUBJECTS[3]='OpenResty'
 
 SUBJECT_URL_PATHS[0]=':1025/${TEST}'
-#SUBJECT_URL_PATHS[1]='/load-testing/${TEST}.php'
-SUBJECT_URL_PATHS[1]=':1026/${TEST}.hh'
-SUBJECT_URL_PATHS[2]=':1027/${TEST}'
+SUBJECT_URL_PATHS[1]='/load-testing/${TEST}.php'
+SUBJECT_URL_PATHS[2]=':1026/${TEST}.hh'
+SUBJECT_URL_PATHS[3]=':1027/${TEST}'
 
 rm -rf results
 rm -f system-load.csv
@@ -33,16 +34,9 @@ dstat -cm --noheaders --float --output system-load.csv &>/dev/null &
 DSTAT_PID=$!
 
 echo "Started at $TIMESTAMP_STARTED"
+echo "============================================================"
 
 sleep 5 # Give some buffer room for beginning of system load data
-
-HOSTNAME="$1"
-if [[ -z "${HOSTNAME// }" ]]; then
-    HOSTNAME="localhost"
-fi
-
-echo "Testing on $HOSTNAME..."
-echo "============================================================"
 
 for (( i=0; i<=$(( ${#TESTS[*]} -1 )); i++ ))
 do
@@ -57,7 +51,7 @@ do
     for (( j=0; j<=$(( ${#SUBJECTS[*]} -1 )); j++ ))
     do
         export SUBJECT="${SUBJECTS[$j]}"
-        eval "URL=\"http://$HOSTNAME${SUBJECT_URL_PATHS[$j]}\""
+        eval "URL=\"http://127.0.0.1${SUBJECT_URL_PATHS[$j]}\""
 
         printf "$SUBJECT..."
 

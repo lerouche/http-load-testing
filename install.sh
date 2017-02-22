@@ -78,7 +78,7 @@ make install
 cd ..
 rm -rf openresty/
 
-# Copy configuration
+# Copy OpenResty configuration
 
 rm -rf "$DST/conf/"
 mkdir -p "$DST/conf/"
@@ -92,6 +92,12 @@ mkdir -p "$DST/app/resty/"
 mkdir -p "$DST/app/express/"
 cp resty/* "$DST/app/resty/"
 cp express/* "$DST/app/express/"
+
+# Copy code for PHP
+
+rm -rf "/var/www/html/load-testing/"
+mkdir -p "/var/www/html/load-testing/"
+cp php/*.php "/var/www/html/load-testing/"
 
 # Install dependencies for OpenResty and Node.js
 
