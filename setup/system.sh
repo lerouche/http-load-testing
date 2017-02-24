@@ -8,6 +8,8 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+cd "$(dirname "$0")"
+
 sudo apt update
 sudo apt install -y git curl software-properties-common wget
 
