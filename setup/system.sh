@@ -35,6 +35,7 @@ sudo apt install -y \
     libapache2-mod-php7.1 \
     php7.1-mcrypt \
     php7.1-mysql \
+    dstat \
 
 sudo mysql_secure_installation
 
@@ -49,5 +50,14 @@ sudo sed -i 's/^#max_connections.*/max_connections=1000000/' /etc/mysql/mysql.co
 
 sudo chown -R "$USER:www-data" /var/www
 sudo chmod -R 770 /var/www
+
+echo 'fs.file-max = 1024000' | sudo tee -a /etc/sysctl.conf
+echo '* soft nproc 1024000' | sudo tee -a /etc/security/limits.conf
+echo '* hard nproc 1024000' | sudo tee -a /etc/security/limits.conf
+echo '* soft nofile 1024000' | sudo tee -a /etc/security/limits.conf
+echo '* hard nofile 1024000' | sudo tee -a /etc/security/limits.conf
+
+sudo cp -R apache2/* /etc/apache2/
+sudo a2enmod headers
 
 exit 0

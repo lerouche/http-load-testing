@@ -14,12 +14,4 @@ hhvm -m server -c "$(realpath dist/conf/hhvm.ini)" &
 
 node dist/app/express/server.js --pid="$(realpath dist/logs)/express.pid" &
 
-read -n 1 -s -p $'Press any key at any time to terminate\n'
-
-kill -QUIT $(head -n 1 dist/logs/nginx.pid)
-kill $(head -n 1 dist/logs/hhvm.pid)
-kill -QUIT $(head -n 1 dist/logs/express.pid)
-
-rm dist/logs/*.pid
-
 exit 0
