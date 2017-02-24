@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 
 KEEPALIVE_ARG=""
 CONCURRENCY_ARG="-c1000"
-SLEEP_DURATION=60
+SLEEP_DURATION=10
 
 while [[ $# -gt 0 ]]; do
     ARG=$1
@@ -104,6 +104,6 @@ kill $DSTAT_PID
 wait $DSTAT_PID &>/dev/null || true
 
 node generate-report.js
-xdg-open ./report.html &>/dev/null &
+#xdg-open ./report.html &>/dev/null &
 
 exit 0

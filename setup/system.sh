@@ -52,7 +52,9 @@ sudo sed -i 's/^#max_connections.*/max_connections=1000000/' /etc/mysql/mysql.co
 
 sudo chown -R "$USER:www-data" /var/www
 sudo chmod -R 770 /var/www
+rm /var/www/html/index.html
 
+echo 'net.ipv4.ip_local_port_range = 1024 65535' | sudo tee -a /etc/sysctl.conf
 echo 'fs.file-max = 1024000' | sudo tee -a /etc/sysctl.conf
 echo '* soft nproc 1024000' | sudo tee -a /etc/security/limits.conf
 echo '* hard nproc 1024000' | sudo tee -a /etc/security/limits.conf
@@ -61,5 +63,10 @@ echo '* hard nofile 1024000' | sudo tee -a /etc/security/limits.conf
 
 sudo cp -R apache2/* /etc/apache2/
 sudo a2enmod headers
+
+cd ../report-template
+npm install
+
+cd ..
 
 exit 0
