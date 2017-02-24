@@ -31,6 +31,10 @@ sudo apt install -y \
     mysql-server \
     hhvm \
     nodejs \
+    apache2 \
+    libapache2-mod-php7.1 \
+    php7.1-mcrypt \
+    php7.1-mysql \
 
 sudo mysql_secure_installation
 
@@ -42,5 +46,8 @@ sudo sed -i '/^skip-external-locking$/a sql-mode = "STRICT_ALL_TABLES,ONLY_FULL_
 sudo sed -i 's/^max_allowed_packet.*/max_allowed_packet = 4096M/' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo sed -i 's/^thread_stack.*/thread_stack = 256K/' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo sed -i 's/^#max_connections.*/max_connections=1000000/' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+sudo chown -R "$USER:www-data" /var/www
+sudo chmod -R 770 /var/www
 
 exit 0
