@@ -63,6 +63,9 @@ DSTAT_PID=$!
 
 echo "Started at $TIMESTAMP_STARTED"
 echo "============================================================"
+[ "$KEEPALIVE_ARG" == "-k" ] && echo "KeepAlive on" || echo "KeepAlive off"
+echo "Sleep $SLEEP_DURATION"
+echo "Concurrency ${CONCURRENCY_ARG:2:${#CONCURRENCY_ARG}}"
 
 sleep 5 # Give some buffer room for beginning of system load data
 
@@ -84,7 +87,7 @@ do
         printf "$SUBJECT..."
 
         SUBJECT_TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
-        ab $CONCURRENCY_ARG -n500000 $KEEPALIVE_ARG -q -l -r "$URL" &> "results/$TEST/$SUBJECT.log"
+        ab $CONCURRENCY_ARG -n500000 $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT.log"
         SUBJECT_TIMESTAMP_ENDED=$(($(date +%s%N)/1000000))
         echo "$SUBJECT;$SUBJECT_TIMESTAMP_STARTED;$SUBJECT_TIMESTAMP_ENDED" >> times.log
 
