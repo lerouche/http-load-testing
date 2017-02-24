@@ -46,7 +46,6 @@ cp __patches/* openresty/bundle/nginx-1.11.2/src/http/
 # Build OpenResty
 
 cd openresty
-# WARNING: FastCGI module is needed for HHVM
 ./configure -j$CPU_CORE_COUNT --prefix="$DST" \
     --with-pcre-jit \
     --with-ipv6 \
@@ -66,6 +65,7 @@ cd openresty
     --without-http_geo_module \
     --without-http_map_module \
     --without-http_split_clients_module \
+    --without-http_fastcgi_module \
     --without-http_uwsgi_module \
     --without-http_scgi_module \
     --without-http_empty_gif_module \
