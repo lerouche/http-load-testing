@@ -1,32 +1,27 @@
 local mysql = require "resty.mysql"
+local cjson = require "cjson"
+
 local db = mysql:new()
 
-local ok, err = db:connect{
+local ok = db:connect({
     host = '127.0.0.1',
     port = 3306,
     database = 'loadtesting',
     user = 'loadtesting',
     password = 'loadtesting'
-}
+})
 if not ok then
-    ngx.status = 500
-    ngx.say('')
-    return
+    ngx.exit(500)
 end
 
-local dbd, err = db:query('SELECT HEX(hexId), incrementValue, textField FROM `table1`')
-if err and err ~= '' then
-    ngx.status = 500
-    ngx.say(err)
-    return
+local dbd = db:query('SELECT HEX(hexId), incrementValue, textField FROM `table1`')
+if not dbd then
+    ngx.exit(500)
 end
 
 local ok = db:set_keepalive(5000, 1000)
 if not ok then
-    ngx.status = 500
-    ngx.say('')
-    return
+    ngx.exit(500)
 end
 
-local cjson = require "cjson"
 ngx.say(cjson.encode(dbd))

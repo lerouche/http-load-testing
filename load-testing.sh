@@ -39,6 +39,7 @@ TESTS[1]='json'
 TESTS[2]='hmac'
 TESTS[3]='db-get'
 TESTS[4]='db-set'
+TESTS[5]='assorted'
 
 SUBJECTS[0]='Express'
 SUBJECTS[1]='PHP'
@@ -69,7 +70,7 @@ echo "Concurrency ${CONCURRENCY_ARG:2:${#CONCURRENCY_ARG}}"
 
 sleep 5 # Give some buffer room for beginning of system load data
 
-for (( i=0; i<=$(( ${#TESTS[*]} -1 )); i++ ))
+for (( i=0; i<=$(( ${#TESTS[*]} - 1 )); i++ ))
 do
     export TEST="${TESTS[$i]}"
     mkdir -p "results/$TEST"
@@ -107,6 +108,5 @@ kill $DSTAT_PID
 wait $DSTAT_PID &>/dev/null || true
 
 node generate-report.js
-#xdg-open ./report.html &>/dev/null &
 
 exit 0

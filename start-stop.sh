@@ -4,6 +4,8 @@ set -e
 
 cd "$(dirname "$0")"
 
+./stop-only.sh &>/dev/null || true
+
 ./start-only.sh
 
 read -n 1 -s -p $'Press any key at any time to terminate\n'

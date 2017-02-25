@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 $db = new mysqli('p:127.0.0.1', 'loadtesting', 'loadtesting', 'loadtesting');
 if ($db->connect_errno) {

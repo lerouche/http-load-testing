@@ -310,8 +310,11 @@ function main() {
         dst: __dirname + '/',
 
         files: ['report.html'],
-        // minifyHtmlJS: true,
-        // minifyHtmlCSS: true,
+        minifyHtmlJS: true,
+        minifyHtmlCSS: true,
+        minifyJS: {
+            passes: 1
+        }
     });
 
     fs.unlinkSync(__dirname + '/report.json');
