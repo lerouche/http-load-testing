@@ -31,7 +31,6 @@ function uint32BinRep(integer) {
     let b2 = integer % 256;
     integer = (integer - integer % 256) / 256;
     let b1 = integer % 256;
-    integer = (integer - integer % 256) / 256;
     return String.fromCharCode(b1, b2, b3, b4);
 }
 
@@ -164,7 +163,7 @@ if (cluster.isMaster) {
         userId <<= 4;
         userId |= 0xfc33;
 
-        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10))).toString('base64');
+        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10)), 'latin1').toString('base64');
 
         let encryptedSessionId = openssl_encrypt(
             cookieParts[2],
@@ -277,7 +276,7 @@ if (cluster.isMaster) {
         userId <<= 4;
         userId |= 0xfc33;
 
-        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10))).toString('base64');
+        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10), 'latin1')).toString('base64');
 
         let encryptedSessionId = openssl_encrypt(
             cookieParts[2],
@@ -330,10 +329,7 @@ if (cluster.isMaster) {
                         'url': urlSafeStrLen,
                         'xss': xssSafeStrLen,
                     },
-                    'tempFileName': tempFileName,
                     'bcrypted': bcrypted,
-                    'sha1ed': sha1ed,
-                    'md5ed': md5ed,
                 },
             }));
         });
