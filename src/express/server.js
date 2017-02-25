@@ -256,5 +256,88 @@ if (cluster.isMaster) {
         });
     });
 
+    app.get('/assorted-lite', (req, res) => {
+        let cookieValue = [
+            crypto.randomBytes(5).toString('hex'),
+            random_int(1, 4000000),
+            crypto.randomBytes(20).toString('base64'),
+            rand(1, 100),
+            Date.now(),
+            crypto.createHmac('sha512', random_bytes(40)).update(random_bytes(40)).digest('hex'),
+            "''&amp;&<script></script>-\"-'''% %a%0\0 \\\\\t\r\n".repeat(random_int(3, 30)),
+        ].join('$');
+
+        let cookieParts = cookieValue.split('$');
+
+        let userId = 0;
+        for (let i = 0; i < cookieParts[0].length; i++) {
+            userId += cookieParts[0].charCodeAt(i);
+        }
+        userId %= 2048;
+        userId <<= 4;
+        userId |= 0xfc33;
+
+        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10))).toString('base64');
+
+        let encryptedSessionId = openssl_encrypt(
+            cookieParts[2],
+            'aes-256-cbc',
+            crypto.randomBytes(16).toString('hex'),
+            crypto.randomBytes(16)
+        ).toString('hex');
+
+        let powerToThePeople = Math.pow(Number.parseInt(cookieParts[3], 10), rand(2, 4)) % Math.PI;
+
+        let formattedTime = new Date(Number.parseInt(cookieParts[4], 10) * 1000).toISOString();
+
+        let equals = crypto.timingSafeEqual(Buffer.from(cookieParts[5], 'hex'), Buffer.from(cookieParts[5], 'hex'));
+
+        let sqlSafeStrLen = cookieValue.replace(/[%_]/g, '\\$&').length;
+        let urlSafeStrLen = encodeURIComponent(cookieValue).length;
+        let xssSafeStrLen = cookieValue.replace(/[&"'<>]/g, c => {
+            switch (c) {
+                case '&':
+                    return "&amp;";
+                case '"':
+                    return "&quot;";
+                case "'":
+                    return "&#039;";
+                case '<':
+                    return "&lt;";
+                case '>':
+                    return "&gt;";
+            }
+        });
+
+        bcrypt.hash(cookieValue, 10, (err, bcrypted) => {
+            if (err) {
+                res.status(500);
+                return;
+            }
+
+            res.type('text').send(JSON.stringify({
+                'error': 0,
+                'data': {
+                    'parts': cookieParts,
+                    'userId': userId,
+                    'packedInt': packedInt,
+                    'encryptedSessionId': encryptedSessionId,
+                    'powerToThePeople': powerToThePeople,
+                    'formattedTime': formattedTime,
+                    'equals': equals,
+                    'safeStrLen': {
+                        'sql': sqlSafeStrLen,
+                        'url': urlSafeStrLen,
+                        'xss': xssSafeStrLen,
+                    },
+                    'tempFileName': tempFileName,
+                    'bcrypted': bcrypted,
+                    'sha1ed': sha1ed,
+                    'md5ed': md5ed,
+                },
+            }));
+        });
+    });
+
     app.listen(1025);
 }

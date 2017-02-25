@@ -39,7 +39,7 @@ TESTS[1]='json'
 TESTS[2]='hmac'
 TESTS[3]='db-get'
 TESTS[4]='db-set'
-TESTS[5]='assorted'
+TESTS[5]='assorted-lite'
 
 SUBJECTS[0]='Express'
 SUBJECTS[1]='PHP'
