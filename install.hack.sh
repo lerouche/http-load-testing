@@ -27,10 +27,15 @@ echo "hhvm.repo.authoritative = true" >> "$HHVM_INI_FILE"
 echo "hhvm.repo.central.path = $DST/app/hhvm.hhbc" >> "$HHVM_INI_FILE"
 echo "hhvm.server.source_root = $DST/app/hack/" >> "$HHVM_INI_FILE"
 
-echo "mysqli.allow_persistent = true" >> "$HHVM_INI_FILE"
-echo "mysqli.max_persistent = 0" >> "$HHVM_INI_FILE"
+echo "mysqli.allow_persistent = 1" >> "$HHVM_INI_FILE"
+echo "mysqli.max_persistent = -1" >> "$HHVM_INI_FILE"
+echo "mysqli.max_links = -1" >> "$HHVM_INI_FILE"
+echo "hhvm.mysql.connect_timeout = 60000" >> "$HHVM_INI_FILE"
+echo "hhvm.mysql.slow_query_threshold = 60000" >> "$HHVM_INI_FILE"
+
 echo "mysqli.default_socket = /var/run/mysqld/mysqld.sock" >> "$HHVM_INI_FILE"
 echo "pdo_mysql.default_socket = /var/run/mysqld/mysqld.sock" >> "$HHVM_INI_FILE"
+echo "hhvm.mysql.socket = /var/run/mysqld/mysqld.sock" >> "$HHVM_INI_FILE"
 
 mkdir -p "$DST/app/hack/"
 cp hack/* "$DST/app/hack/"

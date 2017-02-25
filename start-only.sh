@@ -4,6 +4,7 @@ set -e
 
 cd "$(dirname "$0")"
 
+# BUG FIX: HHVM doesn't use config values for sock location
 if [ ! -L "/tmp/mysql.sock" ]; then
     ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 fi
