@@ -39,6 +39,7 @@ sudo apt install -y \
     php7.1-mysql \
     php7.1-mbstring \
     dstat \
+    unzip \
 
 sudo mysql_secure_installation
 
