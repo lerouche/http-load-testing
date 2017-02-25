@@ -94,7 +94,7 @@ if (cluster.isMaster) {
     let app = express();
     let db = mysql.createPool({
         connectionLimit: 1000,
-        host: '127.0.0.1',
+        socketPath: '/var/run/mysqld/mysqld.sock',
         user: 'loadtesting',
         password: 'loadtesting',
         database: 'loadtesting'

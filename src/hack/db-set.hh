@@ -7,7 +7,7 @@ async function main(): Awaitable<void> {
         "idle_timeout_micros" => 5000000,
         "expiration_policy" => "IdleTime",
     ]);
-    $db = await $pool->connect('127.0.0.1', 3306, 'loadtesting', 'loadtesting', 'loadtesting');
+    $db = await $pool->connect('localhost', 3306, 'loadtesting', 'loadtesting', 'loadtesting');
     $dbq = await $db->query('INSERT INTO `table2` (col1) VALUES (1)');
 }
 

@@ -29,6 +29,8 @@ echo "hhvm.server.source_root = $DST/app/hack/" >> "$HHVM_INI_FILE"
 
 echo "mysqli.allow_persistent = true" >> "$HHVM_INI_FILE"
 echo "mysqli.max_persistent = 0" >> "$HHVM_INI_FILE"
+echo "mysqli.default_socket = /var/run/mysqld/mysqld.sock" >> "$HHVM_INI_FILE"
+echo "pdo_mysql.default_socket = /var/run/mysqld/mysqld.sock" >> "$HHVM_INI_FILE"
 
 mkdir -p "$DST/app/hack/"
 cp hack/* "$DST/app/hack/"

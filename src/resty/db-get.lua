@@ -4,8 +4,7 @@ local cjson = require "cjson"
 local db = mysql:new()
 
 local ok = db:connect({
-    host = '127.0.0.1',
-    port = 3306,
+    path = '/var/run/mysqld/mysqld.sock',
     database = 'loadtesting',
     user = 'loadtesting',
     password = 'loadtesting'

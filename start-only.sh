@@ -4,6 +4,10 @@ set -e
 
 cd "$(dirname "$0")"
 
+if [ ! -L "/tmp/mysql.sock" ]; then
+    ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
+fi
+
 rm -rf dist/logs/
 mkdir -p dist/logs/
 
