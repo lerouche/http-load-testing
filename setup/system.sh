@@ -67,8 +67,8 @@ echo '* hard nofile 1024000' | sudo tee -a /etc/security/limits.conf
 sudo cp -R apache2/* /etc/apache2/
 sudo a2enmod headers
 
-SYSTEM_RAM_MB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
-MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_MB / 15000))
+SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 15000))
 sudo sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" /etc/apache2/mods-available/mpm_prefork.conf
 sudo sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" /etc/apache2/mods-available/mpm_prefork.conf
 
