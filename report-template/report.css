@@ -1,38 +1,9 @@
-@font-face {
-    font-family: 'Myriad Set Pro';
-    src: url('report-template/font/myriad-set-pro_text.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Myriad Set Pro';
-    src: url('report-template/font/myriad-set-pro_bold.woff') format('woff');
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: 'Myriad Set Pro';
-    src: url('report-template/font/myriad-set-pro_semibold.woff') format('woff');
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: 'Myriad Set Pro';
-    src: url('report-template/font/myriad-set-pro_thin.woff') format('woff');
-    font-weight: 300;
-}
-
-@font-face {
-    font-family: 'Myriad Set Pro';
-    src: url('report-template/font/myriad-set-pro_extrathin.woff') format('woff');
-    font-weight: 200;
-}
-
 * {
     box-sizing: border-box;
 }
 
 *:not(pre):not(code) {
-    font-family: 'Myriad Set Pro', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
 body {
