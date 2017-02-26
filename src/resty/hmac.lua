@@ -1,15 +1,14 @@
 local hmac = require("hmac")
+local random = require("random")
 
-local hmac_sha512 = hmac:new("it's no secret...", hmac.ALGOS.SHA512)
+local hmac_sha512 = hmac:new(random.bytes(math.random(16, 32)), hmac.ALGOS.SHA512)
 if not hmac_sha512 then
-    ngx.say("failed to create the hmac_sha512 object")
-    return
+    ngx.exit(500)
 end
 
-local ok = hmac_sha512:update(ngx.time() .. '')
+local ok = hmac_sha512:update(random.bytes(math.random(20, 48)))
 if not ok then
-    ngx.say("failed to add data")
-    return
+    ngx.exit(500)
 end
 
 local mac = hmac_sha512:final()

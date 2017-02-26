@@ -117,8 +117,8 @@ if (cluster.isMaster) {
     });
 
     app.get('/hmac', (req, res) => {
-        let hmac = crypto.createHmac('sha512', "it's no secret...");
-        hmac.update(((Date.now() / 1000) | 0) + '');
+        let hmac = crypto.createHmac('sha512', random_bytes(rand(16, 32)));
+        hmac.update(random_bytes(random_int(20, 48)));
         res.end(hmac.digest('base64'));
     });
 
