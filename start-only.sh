@@ -12,6 +12,8 @@ fi
 rm -rf dist/logs/
 mkdir -p dist/logs/
 
+dist/apache/bin/httpd -k start
+
 dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"
 rm -rf dist/logs/error.log
 

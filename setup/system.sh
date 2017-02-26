@@ -14,7 +14,6 @@ sudo apt update
 sudo apt install -y git curl software-properties-common wget
 
 curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-sudo add-apt-repository -y ppa:ondrej/php
 
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
 sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
@@ -33,11 +32,6 @@ sudo apt install -y \
     mysql-server \
     hhvm \
     nodejs \
-    apache2 \
-    libapache2-mod-php7.1 \
-    php7.1-mcrypt \
-    php7.1-mysql \
-    php7.1-mbstring \
     dstat \
     unzip \
 
@@ -53,24 +47,12 @@ sudo sed -i 's/^thread_stack.*/thread_stack = 256K/' /etc/mysql/mysql.conf.d/mys
 sudo sed -i 's/^#max_connections.*/max_connections=1000000/' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo sed -i 's/^bind-address.*/skip-networking/' /etc/mysql/mysql.conf.d/mysqld.cnf
 
-sudo chown -R "$USER:www-data" /var/www
-sudo chmod -R 770 /var/www
-rm /var/www/html/index.html
-
 echo 'net.ipv4.ip_local_port_range = 1024 65535' | sudo tee -a /etc/sysctl.conf
 echo 'fs.file-max = 1024000' | sudo tee -a /etc/sysctl.conf
 echo '* soft nproc 1024000' | sudo tee -a /etc/security/limits.conf
 echo '* hard nproc 1024000' | sudo tee -a /etc/security/limits.conf
 echo '* soft nofile 1024000' | sudo tee -a /etc/security/limits.conf
 echo '* hard nofile 1024000' | sudo tee -a /etc/security/limits.conf
-
-sudo cp -R apache2/* /etc/apache2/
-sudo a2enmod headers
-
-SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
-MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 15000))
-sudo sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" /etc/apache2/mods-available/mpm_prefork.conf
-sudo sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" /etc/apache2/mods-available/mpm_prefork.conf
 
 mysql -u root -p < database.sql
 

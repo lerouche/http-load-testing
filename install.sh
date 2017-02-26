@@ -24,7 +24,7 @@ mkdir -p "$DST"
 
 # Prepare to build OpenResty
 
-cd "$SRC/nginx"
+cd "$SRC/nginx/"
 rm -rf openresty/
 tar -zvxf openresty-1.11.2.2.tar.gz
 mv openresty-1.11.2.2/ openresty/
@@ -32,7 +32,7 @@ cp __patches/* openresty/bundle/nginx-1.11.2/src/http/
 
 # Build OpenResty
 
-cd openresty
+cd openresty/
 ./configure -j$CPU_CORE_COUNT --prefix="$DST" \
     --with-pcre-jit \
     --with-ipv6 \
