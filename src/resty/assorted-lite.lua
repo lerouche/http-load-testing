@@ -59,11 +59,11 @@ end
 
 local function uint32BinRep(integer)
     local b4 = integer % 256
-    integer = (integer - integer % 256) / 256
+    integer = (integer - b4) / 256
     local b3 = integer % 256
-    integer = (integer - integer % 256) / 256
+    integer = (integer - b3) / 256
     local b2 = integer % 256
-    integer = (integer - integer % 256) / 256
+    integer = (integer - b2) / 256
     local b1 = integer % 256
     return string.char(b1, b2, b3, b4)
 end

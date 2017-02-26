@@ -24,14 +24,14 @@ function random_bytes(size) {
 }
 
 function uint32BinRep(integer) {
-    let b4 = integer % 256;
-    integer = (integer - integer % 256) / 256;
-    let b3 = integer % 256;
-    integer = (integer - integer % 256) / 256;
-    let b2 = integer % 256;
-    integer = (integer - integer % 256) / 256;
-    let b1 = integer % 256;
-    return String.fromCharCode(b1, b2, b3, b4);
+    let b4 = integer & 255;
+    integer >>>= 8;
+    let b3 = integer & 255;
+    integer >>>= 8;
+    let b2 = integer & 255;
+    integer >>>= 8;
+    let b1 = integer & 255;
+    return Buffer.from([b1, b2, b3, b4]);
 }
 
 function openssl_encrypt(data, algo, password, iv) {
@@ -163,7 +163,7 @@ if (cluster.isMaster) {
         userId <<= 4;
         userId |= 0xfc33;
 
-        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10)), 'latin1').toString('base64');
+        let packedInt = uint32BinRep(Number.parseInt(cookieParts[1], 10)).toString('base64');
 
         let encryptedSessionId = openssl_encrypt(
             cookieParts[2],
@@ -276,7 +276,7 @@ if (cluster.isMaster) {
         userId <<= 4;
         userId |= 0xfc33;
 
-        let packedInt = Buffer.from(uint32BinRep(Number.parseInt(cookieParts[1], 10), 'latin1')).toString('base64');
+        let packedInt = uint32BinRep(Number.parseInt(cookieParts[1], 10)).toString('base64');
 
         let encryptedSessionId = openssl_encrypt(
             cookieParts[2],
