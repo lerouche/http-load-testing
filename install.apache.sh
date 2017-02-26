@@ -35,12 +35,6 @@ mv apr-util-1.5.4/ httpd/srclib/apr-util/
 cd httpd/
 ./configure --prefix="$DST/apache" \
     --with-included-apr \
-    --disable-authn-file \
-    --disable-authn-core \
-    --disable-authz-host \
-    --disable-authz-groupfile \
-    --disable-authz-user \
-    --disable-authz-core \
     --disable-access-compat \
     --disable-auth-basic \
     --disable-reqtimeout \
@@ -52,8 +46,9 @@ cd httpd/
     --disable-version \
     --disable-autoindex \
     --disable-dir \
-    --disable-alias
-make
+    --disable-alias \
+    --with-mpm=prefork
+make -j$CPU_CORE_COUNT
 make install
 cd ..
 rm -rf httpd/
@@ -68,7 +63,7 @@ cd php/
     --disable-short-tags \
     --enable-mbstring \
     --with-mysqli
-make
+make -j$CPU_CORE_COUNT
 make install
 cd ..
 rm -rf php/
@@ -77,7 +72,7 @@ cp conf/httpd.conf "$DST/apache/conf/httpd.conf"
 
 SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 15000))
-sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST%" "$DST/apache/conf/httpd.conf"
+sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST/apache%" "$DST/apache/conf/httpd.conf"
 sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf"
 sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf"
 

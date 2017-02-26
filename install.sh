@@ -91,6 +91,7 @@ cd "$ORIG_DIR"
 
 # Copy code for PHP
 
+./install.apache.sh
 ./install.php.sh
 
 # Install dependencies for OpenResty and Node.js
@@ -111,7 +112,7 @@ mkdir -p "$DST/rocks/"
     --lua-suffix=jit \
     --sysconfdir="$DST/conf/" \
     --force-config
-make build
+make -j$CPU_CORE_COUNT build
 make install
 cd ..
 rm -rf luarocks-2.4.2/
