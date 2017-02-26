@@ -1,5 +1,5 @@
 local hmac = require("hmac")
-local random = require("random")
+local random = require("resty.random")
 
 local hmac_sha512 = hmac:new(random.bytes(64), hmac.ALGOS.SHA512)
 if not hmac_sha512 then
