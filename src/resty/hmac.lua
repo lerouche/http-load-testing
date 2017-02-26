@@ -1,12 +1,12 @@
 local hmac = require("hmac")
 local random = require("random")
 
-local hmac_sha512 = hmac:new(random.bytes(math.random(16, 32)), hmac.ALGOS.SHA512)
+local hmac_sha512 = hmac:new(random.bytes(64), hmac.ALGOS.SHA512)
 if not hmac_sha512 then
     ngx.exit(500)
 end
 
-local ok = hmac_sha512:update(random.bytes(math.random(20, 48)))
+local ok = hmac_sha512:update(random.bytes(math.random(60, 90)))
 if not ok then
     ngx.exit(500)
 end

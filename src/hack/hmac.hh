@@ -1,3 +1,3 @@
-<?hh
+<?php
 
-echo base64_encode(hash_hmac('sha512', random_bytes(random_int(20, 48)), random_bytes(rand(16, 32)), true));
+echo base64_encode(hash_hmac('sha512', random_bytes(64), random_bytes(rand(60, 90)), true));
