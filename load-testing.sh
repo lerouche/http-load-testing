@@ -41,6 +41,13 @@ TESTS[3]='db-get'
 TESTS[4]='db-set'
 TESTS[5]='assorted-lite'
 
+TEST_N[0]=50000
+TEST_N[1]=50000
+TEST_N[2]=50000
+TEST_N[3]=50000
+TEST_N[4]=50000
+TEST_N[5]=5000
+
 SUBJECTS[0]='Express'
 SUBJECTS[1]='PHP'
 SUBJECTS[2]='HHVM'
@@ -88,7 +95,7 @@ do
         printf "$SUBJECT..."
 
         SUBJECT_TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
-        ab $CONCURRENCY_ARG -n500000 $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT.log"
+        ab $CONCURRENCY_ARG -n${TEST_N[$i]} $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT.log"
         SUBJECT_TIMESTAMP_ENDED=$(($(date +%s%N)/1000000))
         echo "$SUBJECT;$SUBJECT_TIMESTAMP_STARTED;$SUBJECT_TIMESTAMP_ENDED" >> times.log
 
