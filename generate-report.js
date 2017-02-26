@@ -28,7 +28,7 @@ function main() {
     let times = {};
     (function () {
         let lines = fs.readFileSync(__dirname + '/times.log', 'utf8').split(/[\r\n]+/).map(line => line.trim()).filter(line => !!line);
-        timeStarted = Number.parseInt(lines.splice(0, 1)[0]);
+        timeStarted = Number.parseInt(lines.splice(0, 1)[0], 10);
         let currentTest;
         lines.forEach(function (line) {
             if (line[0] == '#') {
@@ -37,8 +37,8 @@ function main() {
             } else {
                 let parts = line.split(';');
                 times[currentTest][parts[0]] = {
-                    started: Number.parseInt(parts[1]),
-                    ended: Number.parseInt(parts[2]),
+                    started: Number.parseInt(parts[1], 10),
+                    ended: Number.parseInt(parts[2], 10),
                 };
             }
         });
@@ -48,8 +48,7 @@ function main() {
     let systemLoadDataPeriods = [];
     (function () {
         let lines = fs.readFileSync(__dirname + '/system-load.csv', 'utf8').split(/[\r\n]+/).map(line => line.trim()).filter(line => !!line);
-        lines.splice(0, 7);
-        lines.forEach(function (line, lineNo) {
+        lines.slice(7).forEach(function (line, lineNo) {
             let parts = line.split(',');
             systemLoadData.push({
                 timestamp: timeStarted + (1000 * lineNo),
@@ -179,7 +178,7 @@ function main() {
             for (let i = systemLoadData.length - 1; i >= 0; i--) {
                 let data = systemLoadData[i];
                 if (data.timestamp <= ended) {
-                    systemLoadDataEnd = i + 1;
+                    systemLoadDataEnd = Math.min(systemLoadData.length - 1, i + 1);
                     break;
                 }
             }
