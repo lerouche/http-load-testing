@@ -2,122 +2,12 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Here are your results</title>
+        <title>Loading...</title>
 
         <style>
             <ZC-IMPORT[node_modules/c3/c3.min.css]>
             <ZC-IMPORT[./report.css]>
         </style>
-
-        <script>
-            <ZC-IMPORT[node_modules/d3/d3.min.js]>
-            <ZC-IMPORT[node_modules/c3/c3.min.js]>
-            <ZC-IMPORT[node_modules/jquery/dist/jquery.min.js]>
-
-            $(function() {
-                "use strict";
-
-                var testSysloadCharts = [];
-                var totalSysloadCharts = [];
-
-                 function resizeCharts() {
-                     requestsChart.resize({
-                         height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, /* 50 is approximate for the article title's height + margin */
-                         width: document.documentElement.clientWidth - 40,
-                     });
-                     testSysloadCharts.forEach(function(chart) {
-                         chart.resize({
-                             width: document.documentElement.clientWidth - 40,
-                         })
-                     });
-                     totalSysloadCharts.forEach(function(chart) {
-                         chart.resize({
-                             width: document.documentElement.clientWidth - 40,
-                         })
-                     });
-                 }
-
-                var json = <ZC-IMPORT[./report.json]>;
-
-                $( 'h1' ).append(' ' + json.sysinfo.name);
-
-                json.tests.forEach(function(testName) {
-                    $( '#nav-tests-list' )
-                        .append('<li data-id="test-' + testName.toLowerCase().replace(/ /g, '-') + '">' + testName + '</li>');
-                });
-
-                $( '#nav-list' )
-                    .on('click', 'li[data-id]', function() {
-                        if (!this.classList.contains('active')) {
-                            location.hash = '#' + this.dataset.id;
-                            $('#nav-list li.active').add(this).toggleClass('active');
-                        }
-                    });
-
-                $( '#nav-tests-list-container' )
-                    .on('click', function() {
-                        $( '#nav-tests-list' ).toggleClass('open');
-                    });
-
-                Object.keys(json.errors).forEach(function(test) {
-                    var $rows = Object.keys(json.errors[test]).map(function(subject) {
-                        var errorsCount = json.errors[test][subject];
-                        return $( '<tr><td>' + subject + '</td><td class="' + (errorsCount > 0 ? 'red' : '') + '">' + errorsCount + '</td></tr>' );
-                    });
-                    $rows[0].prepend('<td rowspan="' + $rows.length + '">' + test + '</td>' );
-                    $rows.forEach(function($row) { $row.appendTo( '#errors-table > tbody' ); });
-                });
-
-                $( '#details-list > dt' ).each(function() {
-                    var key = this.dataset.key;
-                    var text = json.sysinfo[key];
-                    switch (key) {
-                        case 'sleepDuration':
-                            text += ' seconds';
-                            break;
-
-                        case 'timeStarted':
-                        case 'timeEnded':
-                            text = new Date(text);
-                            break;
-                    }
-                    $(this).next().text(text);
-                });
-
-                json.requestsChart.bindto = '#requests-chart';
-                var requestsChart = c3.generate(json.requestsChart);
-
-                Object.keys(json.testSysloadCharts).forEach(function(test) {
-                    var chartConfig = json.testSysloadCharts[test];
-                    var $article = $(document.importNode($( '#template-article-test-sysload' ).get(0).content, true).childNodes);
-                    $article.appendTo( 'main' );
-                    $article.prop('id', 'test-' + test.toLowerCase().replace(/ /g, '-'));
-                    $article.children('h2').text(test);
-
-                    testSysloadCharts.push(c3.generate(Object.assign(chartConfig.cpu, {
-                        bindto: $article.find('.test-sysload-cpu-chart').get(0)
-                    })));
-
-                    testSysloadCharts.push(c3.generate(Object.assign(chartConfig.memory, {
-                        bindto: $article.find('.test-sysload-memory-chart').get(0)
-                    })));
-                });
-
-                totalSysloadCharts.push(c3.generate(Object.assign(json.totalCpuChart, {
-                    bindto: '#total-sysload-cpu-chart',
-                })));
-
-                totalSysloadCharts.push(c3.generate(Object.assign(json.totalMemoryChart, {
-                    bindto: '#total-sysload-memory-chart',
-                })));
-
-                location.hash = '#overview';
-                $( '#nav-list > li[data-id="overview"]' ).addClass('active');
-
-                $(window).on('resize orientationchange', resizeCharts);
-                setTimeout(resizeCharts, 1000);
-            });
-        </script>
     </head>
 
     <body>
@@ -206,5 +96,145 @@
                 </section>
             </article>
         </main>
+
+        <script>
+            ((undefined) => {
+                "use strict";
+
+                Element.prototype.matches = Element.prototype.matches ||
+                    Element.prototype.matchesSelector ||
+                    Element.prototype.mozMatchesSelector ||
+                    Element.prototype.msMatchesSelector ||
+                    Element.prototype.oMatchesSelector ||
+                    Element.prototype.webkitMatchesSelector;
+
+                <ZC-IMPORT[node_modules/d3/d3.min.js]>
+                <ZC-IMPORT[node_modules/c3/c3.min.js]>
+
+                var testSysloadCharts = [];
+                var totalSysloadCharts = [];
+
+                 function resizeCharts() {
+                     requestsChart.resize({
+                         height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, /* 50 is approximate for the article title's height + margin */
+                         width: document.documentElement.clientWidth - 40,
+                     });
+                     testSysloadCharts.forEach(chart => {
+                         chart.resize({
+                             width: document.documentElement.clientWidth - 40,
+                         })
+                     });
+                     totalSysloadCharts.forEach(chart => {
+                         chart.resize({
+                             width: document.documentElement.clientWidth - 40,
+                         })
+                     });
+                 }
+
+                var json = <ZC-IMPORT[./report.json]>;
+
+                document.title = 'Results for ' + json.sysinfo.name;
+                document.querySelector( 'h1' ).appendChild(document.createTextNode(' ' + json.sysinfo.name));
+
+                json.tests.forEach(testName => {
+                    let li = document.createElement('li');
+                    li.dataset.id = "test-" + testName.toLowerCase().replace(/ /g, '-');
+                    li.textContent = testName;
+                    document.getElementById( '#nav-tests-list' )
+                        .appendChild(li);
+                });
+
+                document.getElementById( 'nav-list' )
+                    .addEventListener('click', e => {
+                        let elem = e.target;
+                        if (elem.matches('li[data-id]')) {
+                            if (!elem.classList.contains('active')) {
+                                location.hash = '#' + elem.dataset.id;
+                                [document.querySelector( '#nav-list li.active' ), elem].forEach(e => e.classList.toggle('active'));
+                            }
+                        }
+                    });
+
+                document.getElementById( 'nav-tests-list-container' )
+                    .addEventListener('click', () => {
+                        document.getElementById( 'nav-tests-list' ).classList.toggle('open');
+                    });
+
+                Object.keys(json.errors).forEach(test => {
+                    var $rows = Object.keys(json.errors[test]).map(subject => {
+                        var errorsCount = json.errors[test][subject];
+                        let dom = document.createElement('tr');
+
+                        [subject, {className: errorsCount > 0 ? 'red' : '', text: errorsCount}].forEach(tddata => {
+                            let td = document.createElement('td');
+                            if (typeof tddata == 'string') {
+                                td.textContent = tddata;
+                            } else {
+                                td.textContent = tddata.text;
+                                td.className = tddata.className;
+                            }
+                            dom.appendChild(td);
+                        });
+                        return dom;
+                    });
+                    let prepend = document.createElement('td');
+                    prepend.rowSpan = $rows.length;
+                    prepend.textContent = test;
+                    $rows[0].insertBefore(prepend, $rows[0].childNodes[0] || null);
+
+                    $rows.forEach($row => document.querySelector( '#errors-table > tbody' ).appendChild($row));
+                });
+
+                [].slice.call(document.querySelectorAll( '#details-list > dt' )).forEach(elem => {
+                    var key = elem.dataset.key;
+                    var text = json.sysinfo[key];
+                    switch (key) {
+                        case 'sleepDuration':
+                            text += ' seconds';
+                            break;
+
+                        case 'timeStarted':
+                        case 'timeEnded':
+                            text = new Date(text);
+                            break;
+                    }
+                    elem.nextElementSibling.textContent = text;
+                });
+
+                json.requestsChart.bindto = '#requests-chart';
+                var requestsChart = c3.generate(json.requestsChart);
+
+                Object.keys(json.testSysloadCharts).forEach(test => {
+                    var chartConfig = json.testSysloadCharts[test];
+                    var $article = document.importNode(document.getElementById( 'template-article-test-sysload' ).content, true).childNodes;
+                    document.querySelector( 'main' ).appendChild($article);
+                    $article.id = 'test-' + test.toLowerCase().replace(/ /g, '-');
+                    [].slice.call($article.children).find(c => c.nodeName == 'H2').textContent = test;
+
+                    testSysloadCharts.push(c3.generate(Object.assign(chartConfig.cpu, {
+                        bindto: $article.querySelector('.test-sysload-cpu-chart')
+                    })));
+
+                    testSysloadCharts.push(c3.generate(Object.assign(chartConfig.memory, {
+                        bindto: $article.querySelector('.test-sysload-memory-chart')
+                    })));
+                });
+
+                totalSysloadCharts.push(c3.generate(Object.assign(json.totalCpuChart, {
+                    bindto: '#total-sysload-cpu-chart',
+                })));
+
+                totalSysloadCharts.push(c3.generate(Object.assign(json.totalMemoryChart, {
+                    bindto: '#total-sysload-memory-chart',
+                })));
+
+                location.hash = '#overview';
+                document.querySelector( '#nav-list > li[data-id="overview"]' ).classList.add('active');
+
+                window.addEventListener('resize', resizeCharts);
+                window.addEventListener('orientationchange', resizeCharts);
+                setTimeout(resizeCharts, 1000);
+            })();
+        </script>
     </body>
 </html>
