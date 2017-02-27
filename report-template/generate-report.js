@@ -285,21 +285,23 @@ class ReportGenerator {
             let timestampB = b.timestamp;
             return timestampA == timestampB ? 0 : timestampA < timestampB ? -1 : 1;
         });
-        allSysloadData = allSysloadData.forEach(data => {
+        allSysloadData.forEach(data => {
             let cpuCol = cpuChartColumns.find(col => col[0] == data.subject);
             if (!cpuCol) {
                 cpuCol = cpuChartColumns[cpuChartColumns.length] = [data.subject];
             }
 
-            cpuCol[data.timestamp - allSysloadData[0].timestamp + 1] = data.totalCpuUsage;
+            cpuCol[Math.floor(data.timestamp / 1000) - Math.floor(allSysloadData[0].timestamp / 1000) + 1] = data.totalCpuUsage;
 
             let memCol = memoryChartColumns.find(col => col[0] == data.subject);
             if (!memCol) {
                 memCol = memoryChartColumns[memoryChartColumns.length] = [data.subject];
             }
 
-            memCol[data.timestamp - allSysloadData[0].timestamp + 1] = data.memoryUsage;
+            memCol[Math.floor(data.timestamp / 1000) - Math.floor(allSysloadData[0].timestamp / 1000) + 1] = data.memoryUsage;
         });
+
+        console.log(cpuChartColumns);
 
         [cpuChartColumns, memoryChartColumns].forEach(c => this.constructor.sortChartColumns(c));
 
