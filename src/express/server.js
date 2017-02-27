@@ -278,17 +278,6 @@ if (cluster.isMaster) {
 
         let packedInt = uint32BinRep(Number.parseInt(cookieParts[1], 10)).toString('base64');
 
-        let encryptedSessionId = openssl_encrypt(
-            cookieParts[2],
-            'aes-256-cbc',
-            crypto.randomBytes(16).toString('hex'),
-            crypto.randomBytes(16)
-        ).toString('hex');
-
-        let powerToThePeople = Math.pow(Number.parseInt(cookieParts[3], 10), rand(2, 4)) % Math.PI;
-
-        let formattedTime = new Date(Number.parseInt(cookieParts[4], 10) * 1000).toISOString();
-
         let equals = crypto.timingSafeEqual(Buffer.from(cookieParts[5], 'hex'), Buffer.from(cookieParts[5], 'hex'));
 
         let sqlSafeStrLen = cookieValue.replace(/[%_]/g, '\\$&').length;
@@ -320,9 +309,6 @@ if (cluster.isMaster) {
                     'parts': cookieParts,
                     'userId': userId,
                     'packedInt': packedInt,
-                    'encryptedSessionId': encryptedSessionId,
-                    'powerToThePeople': powerToThePeople,
-                    'formattedTime': formattedTime,
                     'equals': equals,
                     'safeStrLen': {
                         'sql': sqlSafeStrLen,

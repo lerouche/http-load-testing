@@ -22,18 +22,6 @@ $userId |= 0xfc33;
 
 $packedInt = base64_encode(pack('N', (int)$cookieParts[1]));
 
-$encryptedSessionId = bin2hex(openssl_encrypt(
-    $cookieParts[2],
-    'aes-256-cbc',
-    bin2hex(random_bytes(16)),
-    OPENSSL_RAW_DATA,
-    random_bytes(16)
-));
-
-$powerToThePeople = fmod(pow((int)$cookieParts[3], rand(2, 4)), pi());
-
-$formattedTime = date('c', (int)$cookieParts[4]);
-
 $equals = hash_equals($cookieParts[5], $cookieParts[5]);
 
 $sqlSafeStrLen = mb_strlen(addcslashes($cookieValue, '%_'));
@@ -50,9 +38,6 @@ echo json_encode([
         'parts' => $cookieParts,
         'userId' => $userId,
         'packedInt' => $packedInt,
-        'encryptedSessionId' => $encryptedSessionId,
-        'powerToThePeople' => $powerToThePeople,
-        'formattedTime' => $formattedTime,
         'equals' => $equals,
         'safeStrLen' => [
             'sql' => $sqlSafeStrLen,

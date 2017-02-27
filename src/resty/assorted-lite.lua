@@ -41,15 +41,6 @@ local function hash_hmac(hashAlgo, data, secret)
     return res
 end
 
-local function openssl_encrypt_aes_256_cbc(data, password, iv)
-    local encrypter = AES:new(password, nil, AES.cipher(256, "cbc"), { iv = iv });
-    if not encrypter then
-        error("Failed to initialise AES encryption")
-    end
-
-    return encrypter:encrypt(data)
-end
-
 local function explode(sep, str)
     local sep, fields = sep or ":", {}
     local pattern = string.format("([^%s]+)", sep)
@@ -90,14 +81,6 @@ userId = Bit.bor(userId, 0xfc33);
 
 local packedInt = ngx.encode_base64(uint32BinRep(tonumber(cookieParts[2])));
 
-local encryptedSessionId = String.to_hex(openssl_encrypt_aes_256_cbc(cookieParts[3],
-    random_bytes(16, "hex"),
-    random_bytes(16)))
-
-local powerToThePeople = (tonumber(cookieParts[4]) ^ rand(2, 4)) % math.pi
-
-local formattedTime = os.date('%Y-%m-%dT%H:%M:%S%z', tonumber(cookieParts[5]))
-
 local equals = cookieParts[6] == cookieParts[6]
 
 local sqlSafeStrLen = UTF8.len(cookieValue:gsub('([%%_])', "\\%1"))
@@ -126,9 +109,6 @@ ngx.say(JSON.encode({
         parts = cookieParts,
         userId = userId,
         packedInt = packedInt,
-        encryptedSessionId = encryptedSessionId,
-        powerToThePeople = powerToThePeople,
-        formattedTime = formattedTime,
         equals = equals,
         safeStrLen = {
             sql = sqlSafeStrLen,
