@@ -20,7 +20,7 @@ DST="$(realpath ./dist/)"
 # Build HHVM
 
 cd "$SRC/hhvm/hhvm/"
-rm CMakeCache.txt
+rm -f CMakeCache.txt
 cmake \
     -DMYSQL_UNIX_SOCK_ADDR="/var/run/mysqld/mysqld.sock" \
     -DCMAKE_INSTALL_PREFIX="$DST/hhvm" \
