@@ -6,9 +6,9 @@ const Zcompile = require('zcompile');
 
 class ReportGenerator {
     static sortChartColumns(chartColumns) {
-        cols.sort((colA, colB) => {
-            let a = this.constructor.CHART_COLUMN_ORDER.indexOf(colA[0]);
-            let b = this.constructor.CHART_COLUMN_ORDER.indexOf(colB[0]);
+        chartColumns.sort((colA, colB) => {
+            let a = ReportGenerator.CHART_COLUMN_ORDER.indexOf(colA[0]);
+            let b = ReportGenerator.CHART_COLUMN_ORDER.indexOf(colB[0]);
             if (a < b) {
                 return -1;
             } else if (a == b) {
@@ -17,7 +17,7 @@ class ReportGenerator {
                 return 1;
             }
         });
-        return cols;
+        return chartColumns;
     }
 
     constructor(rootPath) {
@@ -73,10 +73,10 @@ class ReportGenerator {
             return this.subjectsList;
         }
 
-        let tests = this.getSubjectsList();
+        let tests = this.getTestsList();
         let subjects;
         tests.forEach(test => {
-            let dirlist = FileSystem.readdirSync(Path.join(this.rootPath, 'results', test)).filter(file => FileSystem.lstatSync(Path.join(this.rootPath, 'results', file)).isDirectory());
+            let dirlist = FileSystem.readdirSync(Path.join(this.rootPath, 'results', test)).filter(file => FileSystem.lstatSync(Path.join(this.rootPath, 'results', test, file)).isDirectory());
             if (!dirlist.length) {
                 throw new Error(`Test "${test}" has no subjects`);
             }
@@ -136,7 +136,7 @@ class ReportGenerator {
             return this.benchmarkData[test][subject];
         }
 
-        let file = fs.readFileSync(Path.join(this.rootPath, 'results', test, subject, 'benchmark.log'), 'utf8').trim();
+        let file = FileSystem.readFileSync(Path.join(this.rootPath, 'results', test, subject, 'benchmark.log'), 'utf8').trim();
         let regexpMatches, requestsPerSecond, totalErrors;
 
         regexpMatches = /^Requests per second:\s+([0-9.]+)/m.exec(file);
@@ -277,7 +277,7 @@ class ReportGenerator {
             this.getSubjectsList().forEach(subject => {
                 Array.prototype.push.apply(allSysloadData, this.getSystemLoadData(test, subject).map(d => Object.assign(d, {
                     subject: subject,
-                }));
+                })));
             });
         });
         allSysloadData.sort((a, b) => {
@@ -347,7 +347,7 @@ let json = {
         name: report.getReportName(),
     }),
     tests: report.getTestsList(),
-    errors: (function() {
+    errors: (function () {
         let errors = {};
         report.getTestsList().forEach(test => {
             report.getSubjectsList().forEach(subj => {
@@ -361,7 +361,7 @@ let json = {
     })(),
 
     requestsChart: report.generateRequestsChart(),
-    testSysloadCharts: (function() {
+    testSysloadCharts: (function () {
         let charts = {};
         report.getTestsList().forEach(test => {
             charts[test] = report.generateTestSysloadChart(test);
@@ -372,7 +372,7 @@ let json = {
     totalMemoryChart: report.generateTotalSysloadCharts().memory,
 };
 
-fs.writeFileSync(__dirname + '/report.json', JSON.stringify(json));
+FileSystem.writeFileSync(__dirname + '/report.json', JSON.stringify(json));
 
 Zcompile({
     src: __dirname,
@@ -386,4 +386,4 @@ Zcompile({
     }
 });
 
-fs.unlinkSync(__dirname + '/report.json');
+FileSystem.unlinkSync(__dirname + '/report.json');
