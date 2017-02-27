@@ -58,7 +58,7 @@ SUBJECT_START[1]='dist/apache/bin/httpd -k start'
 SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c dist/conf/hhvm.ini &'
 SUBJECT_START[3]='dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"'
 
-SUBJECT_STOP[0]='kill -QUIT $(head -n 1 dist/logs/express.pid) || true'
+SUBJECT_STOP[0]='kill $(head -n 1 dist/logs/express.pid) || true'
 SUBJECT_STOP[1]='dist/apache/bin/httpd -k stop || true'
 SUBJECT_STOP[2]='kill $(head -n 1 dist/logs/hhvm.pid) || true'
 SUBJECT_STOP[3]='kill -QUIT $(head -n 1 dist/logs/nginx.pid) || true'
