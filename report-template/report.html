@@ -22,7 +22,7 @@
 
                  function resizeCharts() {
                      requestsChart.resize({
-                         height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, // 50 is approximate for the article title's height + margin
+                         height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, /* 50 is approximate for the article title's height + margin */
                          width: document.documentElement.clientWidth - 40,
                      });
                      testSysloadCharts.forEach(function(chart) {
@@ -37,7 +37,7 @@
                      });
                  }
 
-                var json = <ZC-IMPORT[../report.json]>;
+                var json = <ZC-IMPORT[./report.json]>;
 
                 $( 'h1' ).append(' ' + json.sysinfo.name);
 

@@ -2,8 +2,7 @@
 
 set -e
 
-ORIG_DIR="$(dirname "$0")"
-ORIG_DIR="$(realpath "$ORIG_DIR")"
+ORIG_DIR="$(realpath "$(dirname "$0")")"
 cd "$ORIG_DIR"
 
 SRC="$(realpath ./src/)"
@@ -12,7 +11,6 @@ DST="$(realpath ./dist/)"
 cd "$SRC"
 
 HHVM_INI_FILE="$DST/conf/hhvm.ini"
-HHVM_FILE_SOCKET="$DST/logs/hhvm.sock"
 
 echo "pid = $DST/logs/hhvm.pid" >> "$HHVM_INI_FILE"
 echo "hhvm.server.port = 1026" >> "$HHVM_INI_FILE"
@@ -41,7 +39,7 @@ mkdir -p "$DST/app/hack/"
 cp hack/* "$DST/app/hack/"
 
 find "$DST/app/hack/" -name "*.hh" > hack-index.tmp
-hhvm --hphp -t hhbc -v AllVolatile=false -l3 --input-list hack-index.tmp -o "$DST/app/"
+dist/hhvm/bin/hhvm --hphp -t hhbc -v AllVolatile=false -l3 --input-list hack-index.tmp -o "$DST/app/"
 rm hack-index.tmp
 
 cd "$ORIG_DIR"

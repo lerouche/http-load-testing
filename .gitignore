@@ -2,10 +2,8 @@ node_modules/
 /.idea/
 
 /report.html
-/report.json
+/report-template/report.json
 /system.info
-/times.log
-/system-load.csv
 
 /results/
 /dist/
