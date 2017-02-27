@@ -372,7 +372,8 @@ let json = {
     totalMemoryChart: report.generateTotalSysloadCharts().memory,
 };
 
-FileSystem.writeFileSync(__dirname + '/report.json', JSON.stringify(json));
+// Optimisation
+FileSystem.writeFileSync(__dirname + '/report.json', JSON.stringify(json).replace(/null(,|])/, '$1'));
 
 let minify = process.argv.slice(2).includes('minify');
 Zcompile({

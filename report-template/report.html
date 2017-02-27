@@ -98,7 +98,7 @@
         </main>
 
         <script>
-            ((undefined) => {
+            (undefined => {
                 "use strict";
 
                 Element.prototype.matches = Element.prototype.matches ||
@@ -132,6 +132,26 @@
                  }
 
                 var json = <ZC-IMPORT[./report.json]>;
+
+                let isArrOrObj = thing => arr && (Array.isArray(arr) || typeof arr == 'object');
+                (function fillInJsonArrays(arr) {
+                    if (Array.isArray(arr)) {
+                        for (let i = 0; i < arr.length; i++) {
+                            if (arr[i] === undefined) {
+                                arr[i] = null;
+                            } else if (isArrOrObj(arr[i])) {
+                                fillInJsonArrays(arr[i]);
+                            }
+                        }
+                    } else {
+                        Object.keys(arr).forEach(prop => {
+                            let val = arr[prop];
+                            if (isArrOrObj(val)) {
+                                fillInJsonArrays(val);
+                            }
+                        });
+                    }
+                })(json);
 
                 document.title = 'Results for ' + json.sysinfo.name;
                 document.querySelector( 'h1' ).appendChild(document.createTextNode(' ' + json.sysinfo.name));
