@@ -71,6 +71,7 @@ SUBJECT_URL_PATHS[3]=':1027/${TEST}'
 rm -rf results
 rm -f report.html
 rm -f system.info
+mkdir -p dist/logs/
 
 TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
 
