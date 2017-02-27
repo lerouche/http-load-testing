@@ -374,14 +374,15 @@ let json = {
 
 FileSystem.writeFileSync(__dirname + '/report.json', JSON.stringify(json));
 
+let minify = process.argv.slice(2).includes('minify');
 Zcompile({
     src: __dirname,
     dst: __dirname + '/../',
 
     files: ['report.html'],
-    minifyHtmlJS: true,
-    minifyHtmlCSS: true,
-    minifyJS: {
+    minifyHtmlJS: minify,
+    minifyHtmlCSS: minify,
+    minifyJS: minify && {
         passes: 1
     }
 });
