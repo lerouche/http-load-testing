@@ -39,7 +39,7 @@ mkdir -p "$DST/app/hack/"
 cp hack/* "$DST/app/hack/"
 
 find "$DST/app/hack/" -name "*.hh" > hack-index.tmp
-dist/hhvm/bin/hhvm --hphp -t hhbc -v AllVolatile=false -l3 --input-list hack-index.tmp -o "$DST/app/"
+"$DST/hhvm/bin/hhvm" --hphp -t hhbc -v AllVolatile=false -l3 --input-list hack-index.tmp -o "$DST/app/"
 rm hack-index.tmp
 
 cd "$ORIG_DIR"
