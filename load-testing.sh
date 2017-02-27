@@ -53,9 +53,9 @@ SUBJECTS[1]='PHP'
 SUBJECTS[2]='HHVM'
 SUBJECTS[3]='OpenResty'
 
-SUBJECT_START[0]='node dist/app/express/server.js --pid="$(realpath dist/logs)/express.pid" &'
+SUBJECT_START[0]='node dist/app/express/server.js --pid=dist/logs/express.pid &'
 SUBJECT_START[1]='dist/apache/bin/httpd -k start'
-SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c "$(realpath dist/conf/hhvm.ini)" &'
+SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c dist/conf/hhvm.ini &'
 SUBJECT_START[3]='dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"'
 
 SUBJECT_STOP[0]='kill -QUIT $(head -n 1 dist/logs/express.pid) || true'
@@ -104,7 +104,7 @@ do
         DSTAT_PID=$!
         sleep 2 # Give some buffer room for system load data
 
-        ab $CONCURRENCY_ARG -n${TEST_N[$i]} $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT/benchmark.log"
+        dist/apache/bin/ab $CONCURRENCY_ARG -n${TEST_N[$i]} $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT/benchmark.log"
 
         printf " done\n"
 
