@@ -44,6 +44,7 @@ cd httpd/
     --disable-env \
     --disable-setenvif \
     --disable-version \
+    --disable-status \
     --disable-autoindex \
     --disable-dir \
     --disable-alias \
@@ -68,13 +69,22 @@ make install
 cd ..
 rm -rf php/
 
-cp conf/httpd.conf "$DST/apache/conf/httpd.conf"
+rm -f "$DST/apache/htdocs/index.html"
+
+cp conf/httpd.conf "$DST/apache/conf/httpd.conf.wait"
 
 SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 15000))
-sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST/apache%" "$DST/apache/conf/httpd.conf"
-sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf"
-sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf"
+sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST/apache%" "$DST/apache/conf/httpd.conf.wait"
+sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf.wait"
+sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf.wait"
+
+grep '^[ \t]*LoadModule[ \t]*' "$DST/apache/conf/httpd.conf" | while read -r line ; do
+    sed -i "/^# LOAD MODULES HERE$/a $line" "$DST/apache/conf/httpd.conf.wait"
+done
+
+mv "$DST/apache/conf/httpd.conf.wait" "$DST/apache/conf/httpd.conf"
+rm -f "$DST/apache/conf/httpd.conf.bak"
 
 cd "$ORIG_DIR"
 

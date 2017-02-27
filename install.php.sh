@@ -4,8 +4,6 @@ set -e
 
 cd "$(dirname "$0")"
 
-rm -rf "/var/www/html/load-testing/"
-mkdir -p "/var/www/html/load-testing/"
-cp src/php/*.php "/var/www/html/load-testing/"
+cp src/php/*.php dist/apache/htdocs/
 
 exit 0

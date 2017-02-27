@@ -140,6 +140,7 @@ cd "$ORIG_DIR"
 
 # Compile HHVM code
 
+./install.hhvm.sh
 ./install.hack.sh
 
 # Finish

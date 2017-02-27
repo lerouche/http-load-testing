@@ -20,13 +20,10 @@ DST="$(realpath ./dist/)"
 # Build HHVM
 
 cd "$SRC/hhvm/hhvm/"
-./configure \
-    -DENABLE_FASTCGI=OFF \
-    -DENABLE_PROXYGEN=ON \
-    -DENABLE_COTIRE=ON
+rm CMakeCache.txt
 cmake \
     -DMYSQL_UNIX_SOCK_ADDR="/var/run/mysqld/mysqld.sock" \
-    -DCPACK_PACKAGING_INSTALL_PREFIX="$DST/hhvm" \
+    -DCMAKE_INSTALL_PREFIX="$DST/hhvm" \
     .
 make -j$CPU_CORE_COUNT
 make install
