@@ -301,8 +301,6 @@ class ReportGenerator {
             memCol[Math.floor(data.timestamp / 1000) - Math.floor(allSysloadData[0].timestamp / 1000) + 1] = data.memoryUsage;
         });
 
-        console.log(cpuChartColumns);
-
         [cpuChartColumns, memoryChartColumns].forEach(c => this.constructor.sortChartColumns(c));
 
         return this.totalSysloadCharts = {
