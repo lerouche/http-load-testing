@@ -7,6 +7,7 @@ cd "$(dirname "$0")"
 KEEPALIVE_ARG=""
 CONCURRENCY_ARG="1000"
 SLEEP_DURATION=10
+REPORT_NAME=""
 
 while [[ $# -gt 0 ]]; do
     ARG=$1
@@ -23,6 +24,11 @@ while [[ $# -gt 0 ]]; do
 
         -s|--sleep)
             SLEEP_DURATION="$2"
+            shift
+            ;;
+
+        -n|--name)
+            REPORT_NAME="$2"
             shift
             ;;
 
@@ -131,8 +137,14 @@ echo "cpuCores=$(nproc --all)" >> system.info
 echo "memory=$(free | awk '/^Mem:/{print $2}')" >> system.info
 echo "sleepDuration=$SLEEP_DURATION" >> system.info
 
-printf "Enter the name for this report: "
-read REPORT_NAME
+echo
+
+while [[ -z "${REPORT_NAME// }" ]]; do
+    printf "Enter the name for this report: "
+    read REPORT_NAME
+done
+
+echo
 
 node report-template/generate-report.js --name="$REPORT_NAME"
 
