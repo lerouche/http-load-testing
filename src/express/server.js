@@ -99,6 +99,21 @@ if (cluster.isMaster) {
         database: 'loadtesting'
     });
 
+    app.get('/split-str', (req, res) => {
+        let cookieValue = [
+            crypto.randomBytes(5).toString('hex'),
+            random_int(1, 4000000),
+            crypto.randomBytes(20).toString('base64'),
+            rand(1, 100),
+            Math.floor(Date.now() / 1000),
+            "''&amp;&<script></script>-\"-'''% %a%0\0 \\\\\t\r\n".repeat(random_int(3, 30)),
+        ].join('$');
+
+        let cookieParts = cookieValue.split('$');
+
+        res.send(cookieValue);
+    });
+
     app.get('/utf8-strlen', (req, res) => {
         res.send(String(crypto.randomBytes(1024).toString('utf8').length));
     });
@@ -182,7 +197,7 @@ if (cluster.isMaster) {
             random_int(1, 4000000),
             crypto.randomBytes(20).toString('base64'),
             rand(1, 100),
-            Date.now(),
+            Math.floor(Date.now() / 1000),
             crypto.createHmac('sha512', random_bytes(40)).update(random_bytes(40)).digest('hex'),
             "''&amp;&<script></script>-\"-'''% %a%0\0 \\\\\t\r\n".repeat(random_int(3, 30)),
         ].join('$');
@@ -295,7 +310,7 @@ if (cluster.isMaster) {
             random_int(1, 4000000),
             crypto.randomBytes(20).toString('base64'),
             rand(1, 100),
-            Date.now(),
+            Math.floor(Date.now() / 1000),
             crypto.createHmac('sha512', random_bytes(40)).update(random_bytes(40)).digest('hex'),
             "''&amp;&<script></script>-\"-'''% %a%0\0 \\\\\t\r\n".repeat(random_int(3, 30)),
         ].join('$');
