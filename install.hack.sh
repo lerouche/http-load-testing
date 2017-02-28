@@ -11,6 +11,7 @@ DST="$(realpath ./dist/)"
 cd "$SRC"
 
 HHVM_INI_FILE="$DST/conf/hhvm.ini"
+> "$HHVM_INI_FILE"
 
 echo "pid = $DST/logs/hhvm.pid" >> "$HHVM_INI_FILE"
 echo "hhvm.server.port = 1026" >> "$HHVM_INI_FILE"
