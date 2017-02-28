@@ -74,7 +74,7 @@ rm -f "$DST/apache/htdocs/index.html"
 cp conf/httpd.conf "$DST/apache/conf/httpd.conf.wait"
 
 SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
-MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 15000))
+MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 10000))
 sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST/apache%" "$DST/apache/conf/httpd.conf.wait"
 sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf.wait"
 sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf.wait"

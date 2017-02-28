@@ -377,4 +377,4 @@ if (!FileSystem.existsSync(__dirname + '/report-template.min.html')) {
     require(__dirname + '/minify-report-template.js');
 }
 let reportHtml = FileSystem.readFileSync(__dirname + '/report-template.min.html', 'utf8').trim().replace('GENERATED_REPORT_DATA_JSON', jsonSerialised);
-FileSystem.writeFileSync(__dirname + '/../report.html');
+FileSystem.writeFileSync(__dirname + '/../report.html', reportHtml);

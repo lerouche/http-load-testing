@@ -4,6 +4,11 @@ set -e
 
 cd "$(dirname "$0")"
 
+# BUGFIX: HHVM doesn't use proper sock path despite being compiled with it and set 3 times in its config...
+if [ ! -L "/tmp/mysql.sock" ]; then
+    ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
+fi
+
 mkdir -p dist/logs/
 
 dist/apache/bin/httpd -k start
