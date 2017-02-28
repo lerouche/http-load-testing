@@ -7,5 +7,12 @@ node_modules/
 /results/
 /dist/
 
+/src/apache/httpd/
+/src/apache/php/
+
+/src/nginx/openresty/
+/src/nginx/luarocks/
+/src/nginx/lib/*/
+
 /report-template/report-template.min.html
 *.tmp

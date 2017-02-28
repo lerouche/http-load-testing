@@ -64,13 +64,17 @@ TESTS[4]='db-set'
 TESTS[5]='assorted-lite'
 TESTS[6]='utf8-strlen'
 TESTS[7]='bcrypt'
+TESTS[8]='encrypt'
 
 TEST_N[0]=250000
 TEST_N[1]=250000
 TEST_N[2]=250000
-TEST_N[3]=100000
+TEST_N[3]=150000
 TEST_N[4]=100000
 TEST_N[5]=5000
+TEST_N[6]=250000
+TEST_N[7]=5000
+TEST_N[8]=5000
 
 SUBJECTS[0]='Express'
 SUBJECTS[1]='PHP'
@@ -78,9 +82,9 @@ SUBJECTS[2]='HHVM'
 SUBJECTS[3]='OpenResty'
 
 SUBJECT_START[0]='node dist/app/express/server.js --pid=dist/logs/express.pid &'
-SUBJECT_START[1]='dist/apache/bin/httpd -k start'
+SUBJECT_START[1]='dist/apache/bin/httpd -k start -f dist/conf/apache.conf'
 SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c dist/conf/hhvm.ini &'
-SUBJECT_START[3]='dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"'
+SUBJECT_START[3]='dist/nginx/sbin/nginx -p dist/ -c conf/nginx.conf'
 
 SUBJECT_STOP[0]='KPID=$(head -n 1 dist/logs/express.pid); kill $KPID; wait $KPID &> /dev/null || true'
 SUBJECT_STOP[1]='KPID=$(head -n 1 dist/logs/apache.pid); kill -TERM $KPID; wait $KPID &> /dev/null || true'
@@ -95,7 +99,6 @@ SUBJECT_URL_PATHS[3]=':1027/${TEST}'
 rm -rf results
 rm -f report.html
 rm -f system.info
-mkdir -p dist/logs/
 
 TIMESTAMP_STARTED=$(($(date +%s%N)/1000000))
 

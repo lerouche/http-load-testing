@@ -122,6 +122,17 @@ if (cluster.isMaster) {
         });
     });
 
+    app.get('/encrypt', (req, res) => {
+        let encryptedSessionId = openssl_encrypt(
+            crypto.randomBytes(20).toString('base64'),
+            'aes-256-cbc',
+            crypto.randomBytes(16).toString('hex'),
+            crypto.randomBytes(16)
+        ).toString('hex');
+
+        res.send(encryptedSessionId);
+    });
+
     app.get('/hello-world', (req, res) => {
         res.end('Hello world!');
     });

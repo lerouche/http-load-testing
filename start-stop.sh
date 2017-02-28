@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-set -e
-
 cd "$(dirname "$0")"
 
-./stop-only.sh &>/dev/null || true
+./stop-only.sh &>/dev/null
 
-./start-only.sh || ./stop-only.sh &>/dev/null || true
+./start-only.sh || { ./stop-only.sh &>/dev/null; exit 1; }
 
 read -n 1 -s -p $'Press any key at any time to terminate\n'
 
-./stop-only.sh
+./stop-only.sh &>/dev/null
 
 exit 0

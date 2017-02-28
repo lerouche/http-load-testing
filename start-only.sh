@@ -9,9 +9,7 @@ if [ ! -L "/tmp/mysql.sock" ]; then
     ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 fi
 
-mkdir -p dist/logs/
-
-dist/apache/bin/httpd -k start
+dist/apache/bin/httpd -k start -f "$DST/conf/apache.conf"
 
 dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"
 

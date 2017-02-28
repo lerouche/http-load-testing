@@ -55,6 +55,7 @@ cd ..
 rm -rf httpd/
 
 tar xvf php-7.1.2.tar.gz
+rm -rf php/
 mv php-7.1.2/ php/
 cd php/
 ./configure --prefix="$DST/php" \
@@ -63,7 +64,8 @@ cd php/
     --disable-cgi \
     --disable-short-tags \
     --enable-mbstring \
-    --with-mysqli
+    --with-mysqli \
+    --with-openssl
 make -j$CPU_CORE_COUNT
 make install
 cd ..
@@ -71,19 +73,20 @@ rm -rf php/
 
 rm -f "$DST/apache/htdocs/index.html"
 
-cp conf/httpd.conf "$DST/apache/conf/httpd.conf.wait"
+cp httpd.conf "$DST/conf/apache.conf"
 
 SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 MPM_PREFORK_CONNECTIONS=$(($SYSTEM_RAM_KB / 10000))
-sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST/apache%" "$DST/apache/conf/httpd.conf.wait"
-sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf.wait"
-sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" "$DST/apache/conf/httpd.conf.wait"
+# Do NOT put trailing slash after $DST/apache
+sed -i "s%COMPILE_VAR_APACHE_SERVER_ROOT%$DST/apache%" "$DST/conf/apache.conf"
+sed -i "s/MaxRequestWorkers.*/MaxRequestWorkers $MPM_PREFORK_CONNECTIONS/" "$DST/conf/apache.conf"
+sed -i "s/ServerLimit.*/ServerLimit $MPM_PREFORK_CONNECTIONS/" "$DST/conf/apache.conf"
 
-grep '^[ \t]*LoadModule[ \t]*' "$DST/apache/conf/httpd.conf" | while read -r line ; do
-    sed -i "/^# LOAD MODULES HERE$/a $line" "$DST/apache/conf/httpd.conf.wait"
+grep '^[ \t]*LoadModule[ \t]*' "$DST/apache/conf/httpd.conf" | while read -r line; do
+    sed -i "/^# LOAD MODULES HERE$/a $line" "$DST/conf/apache.conf"
 done
 
-mv "$DST/apache/conf/httpd.conf.wait" "$DST/apache/conf/httpd.conf"
+rm -f "$DST/apache/conf/httpd.conf"
 rm -f "$DST/apache/conf/httpd.conf.bak"
 
 cd "$ORIG_DIR"
