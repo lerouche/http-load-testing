@@ -372,6 +372,6 @@ let json = {
 };
 
 // Optimisation
-let json = JSON.stringify(json).replace(/null(,|])/, '$1');
-let reportHtml = FileSystem.readFileSync(__dirname + '/report-template.min.html', 'utf8').trim().replace('GENERATED_REPORT_DATA_JSON', json);
+let jsonSerialised = JSON.stringify(json).replace(/null(,|])/, '$1');
+let reportHtml = FileSystem.readFileSync(__dirname + '/report-template.min.html', 'utf8').trim().replace('GENERATED_REPORT_DATA_JSON', jsonSerialised);
 FileSystem.writeFileSync(__dirname + '/../report.html');
