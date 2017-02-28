@@ -47,7 +47,7 @@ OUTPUT_DIR="$(realpath "$OUTPUT_DIR")"
 for (( i=0; i<=$(( ${#TESTS[*]} - 1 )); i++ ))
 do
     TEST_C_VAL="${TESTS[$i]}"
-    ./load-testing -c "$TEST_C_VAL" -s "$SLEEP" -n "$REPORT_NAME (${TEST_C_VAL}c)"
+    ./load-testing.sh -c "$TEST_C_VAL" -s "$SLEEP" -n "$REPORT_NAME (${TEST_C_VAL}c)"
     mv report.html "$OUTPUT_DIR/$REPORT_NAME-${TEST_C_VAL}c.html"
 done
 
