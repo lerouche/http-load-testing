@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 KEEPALIVE_ARG=""
-CONCURRENCY_ARG="-c1000"
+CONCURRENCY_ARG="1000"
 SLEEP_DURATION=10
 
 while [[ $# -gt 0 ]]; do
@@ -17,7 +17,7 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         -c|--concurrency)
-            CONCURRENCY_ARG="-c$2"
+            CONCURRENCY_ARG="$2"
             shift
             ;;
 
@@ -79,7 +79,7 @@ echo "Started at $(date)"
 echo "============================================================"
 [ "$KEEPALIVE_ARG" == "-k" ] && echo "KeepAlive   on" || echo "KeepAlive   off"
 echo "Sleep       $SLEEP_DURATION"
-echo "Concurrency ${CONCURRENCY_ARG:2:${#CONCURRENCY_ARG}}"
+echo "Concurrency $CONCURRENCY_ARG"
 
 for (( j=0; j<=$(( ${#SUBJECTS[*]} - 1 )); j++ ))
 do
@@ -104,7 +104,10 @@ do
         DSTAT_PID=$!
         sleep 2 # Give some buffer room for system load data
 
-        dist/apache/bin/ab $CONCURRENCY_ARG -n${TEST_N[$i]} $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT/benchmark.log"
+        THIS_N_VAL=${TEST_N[$i]}
+        THIS_CONCURRENCY_VAL=$((CONCURRENCY_ARG > THIS_N_VAL ? THIS_N_VAL : CONCURRENCY_ARG))
+
+        dist/apache/bin/ab -c $THIS_CONCURRENCY_VAL -n $THIS_N_VAL $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT/benchmark.log"
 
         printf " done\n"
 
