@@ -99,6 +99,29 @@ if (cluster.isMaster) {
         database: 'loadtesting'
     });
 
+    app.get('/utf8-strlen', (req, res) => {
+        res.send(String(crypto.randomBytes(1024).toString('utf8').length));
+    });
+
+    app.get('/bcrypt', (req, res) => {
+        let password = random_bytes(72);
+        bcrypt.hash(password, 10, (err, bcrypted) => {
+            if (err) {
+                res.status(500);
+                return;
+            }
+
+            bcrypt.compare(password, bcrypted, (err, matches) => {
+                if (err || !matches) {
+                    res.status(500);
+                    return;
+                }
+
+                res.send('');
+            });
+        });
+    });
+
     app.get('/hello-world', (req, res) => {
         res.end('Hello world!');
     });

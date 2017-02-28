@@ -27,6 +27,14 @@ cmake \
     .
 make -j$CPU_CORE_COUNT
 make install
+cd "$ORIG_DIR"
+
+# Install configuration file
+
+cp "$SRC/hhvm/hhvm.ini" "$DST/conf/hhvm.ini"
+sed -i "s%DST%$DST%" "$DST/conf/hhvm.ini"
+
+# Finish
 
 cd "$ORIG_DIR"
 

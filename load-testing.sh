@@ -62,6 +62,8 @@ TESTS[2]='hmac'
 TESTS[3]='db-get'
 TESTS[4]='db-set'
 TESTS[5]='assorted-lite'
+TESTS[6]='utf8-strlen'
+TESTS[7]='bcrypt'
 
 TEST_N[0]=250000
 TEST_N[1]=250000

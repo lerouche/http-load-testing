@@ -78,15 +78,6 @@ LUA_MODULES_PATH3="$DST/rocks/lib/lua/5.1/"
 sed -i "s%lua_package_cpath.*%lua_package_cpath \"$LUA_MODULES_PATH1?.so;$LUA_MODULES_PATH2?.so;$LUA_MODULES_PATH3?.so\";%" "$DST/conf/nginx.conf"
 sed -i "s%lua_package_path.*%lua_package_path \"$LUA_MODULES_PATH1?.lua;$LUA_MODULES_PATH2?.lua;$LUA_MODULES_PATH3?.lua\";%" "$DST/conf/nginx.conf"
 
-# Copy code for OpenResty and Node.js
-
-cd "$SRC"
-
-mkdir -p "$DST/app/resty/"
-mkdir -p "$DST/app/express/"
-cp resty/* "$DST/app/resty/"
-cp express/* "$DST/app/express/"
-
 cd "$ORIG_DIR"
 
 # Copy code for PHP
@@ -94,7 +85,7 @@ cd "$ORIG_DIR"
 ./install.apache.sh
 ./install.php.sh
 
-# Install dependencies for OpenResty and Node.js
+# Install dependencies for OpenResty
 
 export LUA_INCDIR="$DST/luajit/include/luajit-2.1"
 LUA_MODULES_DIR="$DST/site/lualib"
@@ -131,10 +122,6 @@ wget "https://raw.githubusercontent.com/jkeys089/lua-resty-hmac/master/lib/resty
 
 "$DST/luarocks/bin/luarocks" install bcrypt
 "$DST/luarocks/bin/luarocks" install luautf8
-
-cd "$DST/app/express"
-npm install
-rm package.json
 
 cd "$ORIG_DIR"
 
