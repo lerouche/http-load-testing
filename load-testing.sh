@@ -4,6 +4,16 @@ set -e
 
 cd "$(dirname "$0")"
 
+if ! hash node 2>/dev/null; then
+    echo Node.js is not installed
+    exit 1
+fi
+
+if ! hash dstat 2>/dev/null; then
+    echo Dstat is not installed
+    exit 1
+fi
+
 KEEPALIVE_ARG=""
 CONCURRENCY_ARG="1000"
 SLEEP_DURATION=10
@@ -64,10 +74,10 @@ SUBJECT_START[1]='dist/apache/bin/httpd -k start'
 SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c dist/conf/hhvm.ini &'
 SUBJECT_START[3]='dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"'
 
-SUBJECT_STOP[0]='kill $(head -n 1 dist/logs/express.pid) || true'
-SUBJECT_STOP[1]='dist/apache/bin/httpd -k stop || true'
-SUBJECT_STOP[2]='kill $(head -n 1 dist/logs/hhvm.pid) || true'
-SUBJECT_STOP[3]='kill -QUIT $(head -n 1 dist/logs/nginx.pid) || true'
+SUBJECT_STOP[0]='KPID=$(head -n 1 dist/logs/express.pid); kill $KPID; wait $KPID &> /dev/null || true'
+SUBJECT_STOP[1]='dist/apache/bin/httpd -k stop &> /dev/null || true'
+SUBJECT_STOP[2]='KPID=$(head -n 1 dist/logs/hhvm.pid); kill $KPID; wait $KPID &> /dev/null || true'
+SUBJECT_STOP[3]='KPID=$(head -n 1 dist/logs/nginx.pid); kill -QUIT $KPID; wait $KPID &> /dev/null || true'
 
 SUBJECT_URL_PATHS[0]=':1025/${TEST}'
 SUBJECT_URL_PATHS[1]=':1028/${TEST}.php'
