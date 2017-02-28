@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 KEEPALIVE=false
-SLEEP_DURATION_ARG="10"
+SLEEP_DURATION="10"
 REPORT_NAME="http-load-testing $(date)"
 OUTPUT_DIR="~/http-load-testing-reports/"
 
@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         -s|--sleep)
-            SLEEP_DURATION_ARG="$2"
+            SLEEP_DURATION="$2"
             shift
             ;;
 
@@ -47,7 +47,7 @@ OUTPUT_DIR="$(realpath "$OUTPUT_DIR")"
 for (( i=0; i<=$(( ${#TESTS[*]} - 1 )); i++ ))
 do
     TEST_C_VAL="${TESTS[$i]}"
-    ./load-testing.sh -c "$TEST_C_VAL" -s "$SLEEP" -n "$REPORT_NAME (${TEST_C_VAL}c)"
+    ./load-testing.sh -c "$TEST_C_VAL" -s "$SLEEP_DURATION" -n "$REPORT_NAME (${TEST_C_VAL}c)"
     mv report.html "$OUTPUT_DIR/$REPORT_NAME-${TEST_C_VAL}c.html"
 done
 
@@ -55,7 +55,7 @@ if [ "$KEEPALIVE" = true ]; then
     for (( j=0; j<=$(( ${#TESTS[*]} - 1 )); j++ ))
     do
         TEST_C_VAL="${TESTS[$j]}"
-        ./load-testing -k -c "$TEST_C_VAL" -s "$SLEEP" -n "$REPORT_NAME (${TEST_C_VAL}c k)"
+        ./load-testing -k -c "$TEST_C_VAL" -s "$SLEEP_DURATION" -n "$REPORT_NAME (${TEST_C_VAL}c k)"
         mv report.html "$OUTPUT_DIR/$REPORT_NAME-${TEST_C_VAL}c-k.html"
     done
 fi
