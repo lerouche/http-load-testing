@@ -6,8 +6,11 @@
 
         <style>
             <ZC-IMPORT[node_modules/c3/c3.min.css]>
-            <ZC-IMPORT[./report.css]>
+            <ZC-IMPORT[./report-template.css]>
         </style>
+
+        <script src="node_modules/d3/d3.min.js"></script>
+        <script src="node_modules/c3/c3.min.js"></script>
     </head>
 
     <body>
@@ -108,32 +111,29 @@
                     Element.prototype.oMatchesSelector ||
                     Element.prototype.webkitMatchesSelector;
 
-                <ZC-IMPORT[node_modules/d3/d3.min.js]>
-                <ZC-IMPORT[node_modules/c3/c3.min.js]>
+                let testSysloadCharts = [];
+                let totalSysloadCharts = [];
 
-                var testSysloadCharts = [];
-                var totalSysloadCharts = [];
+                function resizeCharts() {
+                    requestsChart.resize({
+                        height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, /* 50 is approximate for the article title's height + margin */
+                        width: document.documentElement.clientWidth - 40,
+                    });
+                    testSysloadCharts.forEach(chart => {
+                        chart.resize({
+                            width: document.documentElement.clientWidth - 40,
+                        });
+                    });
+                    totalSysloadCharts.forEach(chart => {
+                        chart.resize({
+                            width: document.documentElement.clientWidth - 40,
+                        });
+                    });
+                }
 
-                 function resizeCharts() {
-                     requestsChart.resize({
-                         height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, /* 50 is approximate for the article title's height + margin */
-                         width: document.documentElement.clientWidth - 40,
-                     });
-                     testSysloadCharts.forEach(chart => {
-                         chart.resize({
-                             width: document.documentElement.clientWidth - 40,
-                         })
-                     });
-                     totalSysloadCharts.forEach(chart => {
-                         chart.resize({
-                             width: document.documentElement.clientWidth - 40,
-                         })
-                     });
-                 }
+                let json = GENERATED_REPORT_DATA_JSON;
 
-                var json = <ZC-IMPORT[./report.json]>;
-
-                let isArrOrObj = thing => arr && (Array.isArray(arr) || typeof arr == 'object');
+                let isArrOrObj = function(thing) { return arr && (Array.isArray(arr) || typeof arr == 'object') };
                 (function fillInJsonArrays(arr) {
                     if (Array.isArray(arr)) {
                         for (let i = 0; i < arr.length; i++) {

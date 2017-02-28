@@ -2,10 +2,10 @@ node_modules/
 /.idea/
 
 /report.html
-/report-template/report.json
 /system.info
 
 /results/
 /dist/
 
+/report-template/report-template.min.html
 *.tmp

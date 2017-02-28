@@ -2,7 +2,6 @@
 
 const FileSystem = require('fs');
 const Path = require('path');
-const Zcompile = require('zcompile');
 
 class ReportGenerator {
     static sortChartColumns(chartColumns) {
@@ -373,23 +372,6 @@ let json = {
 };
 
 // Optimisation
-FileSystem.writeFileSync(__dirname + '/report.json', JSON.stringify(json).replace(/null(,|])/, '$1'));
-
-let minify = process.argv.slice(2).includes('minify');
-Zcompile({
-    source: __dirname,
-    destination: __dirname + '/../',
-
-    minifySelectors: false,
-    minifyJS: minify && {
-        harmony: true,
-    },
-    minifyHTML: minify && {
-		minifyInlineJS: true,
-		minifyInlineCSS: true,
-    },
-
-    files: ['report.html'],
-});
-
-FileSystem.unlinkSync(__dirname + '/report.json');
+let json = JSON.stringify(json).replace(/null(,|])/, '$1');
+let reportHtml = FileSystem.readFileSync(__dirname + '/report-template.min.html', 'utf8').trim().replace('GENERATED_REPORT_DATA_JSON', json);
+FileSystem.writeFileSync(__dirname + '/../report.html');

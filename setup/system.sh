@@ -110,6 +110,7 @@ mysql -u root -p < database.sql
 
 cd ../report-template
 npm install
+node minify-report-template.js
 
 cd ..
 
