@@ -81,7 +81,7 @@ SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c dist/conf/hhvm.ini &'
 SUBJECT_START[3]='dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"'
 
 SUBJECT_STOP[0]='KPID=$(head -n 1 dist/logs/express.pid); kill $KPID; wait $KPID &> /dev/null || true'
-SUBJECT_STOP[1]='dist/apache/bin/httpd -k stop &> /dev/null || true'
+SUBJECT_STOP[1]='KPID=$(head -n 1 dist/logs/apache.pid); kill -TERM $KPID; wait $KPID &> /dev/null || true'
 SUBJECT_STOP[2]='KPID=$(head -n 1 dist/logs/hhvm.pid); kill $KPID; wait $KPID &> /dev/null || true'
 SUBJECT_STOP[3]='KPID=$(head -n 1 dist/logs/nginx.pid); kill -QUIT $KPID; wait $KPID &> /dev/null || true'
 

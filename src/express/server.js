@@ -75,7 +75,7 @@ function md5_file(file, cb) {
 }
 
 if (cluster.isMaster) {
-    for (let i = 0; i < CPU_CORES * 4; i++) {
+    for (let i = 0; i < CPU_CORES; i++) {
         cluster.fork();
     }
 

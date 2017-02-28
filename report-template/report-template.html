@@ -133,7 +133,7 @@
 
                 let json = GENERATED_REPORT_DATA_JSON;
 
-                let isArrOrObj = function(thing) { return arr && (Array.isArray(arr) || typeof arr == 'object') };
+                let isArrOrObj = function(thing) { return thing && (Array.isArray(thing) || typeof thing == 'object') };
                 (function fillInJsonArrays(arr) {
                     if (Array.isArray(arr)) {
                         for (let i = 0; i < arr.length; i++) {
@@ -160,7 +160,7 @@
                     let li = document.createElement('li');
                     li.dataset.id = "test-" + testName.toLowerCase().replace(/ /g, '-');
                     li.textContent = testName;
-                    document.getElementById( '#nav-tests-list' )
+                    document.getElementById( 'nav-tests-list' )
                         .appendChild(li);
                 });
 
@@ -181,8 +181,8 @@
                     });
 
                 Object.keys(json.errors).forEach(test => {
-                    var $rows = Object.keys(json.errors[test]).map(subject => {
-                        var errorsCount = json.errors[test][subject];
+                    let $rows = Object.keys(json.errors[test]).map(subject => {
+                        let errorsCount = json.errors[test][subject];
                         let dom = document.createElement('tr');
 
                         [subject, {className: errorsCount > 0 ? 'red' : '', text: errorsCount}].forEach(tddata => {
@@ -206,8 +206,8 @@
                 });
 
                 [].slice.call(document.querySelectorAll( '#details-list > dt' )).forEach(elem => {
-                    var key = elem.dataset.key;
-                    var text = json.sysinfo[key];
+                    let key = elem.dataset.key;
+                    let text = json.sysinfo[key];
                     switch (key) {
                         case 'sleepDuration':
                             text += ' seconds';
@@ -222,11 +222,11 @@
                 });
 
                 json.requestsChart.bindto = '#requests-chart';
-                var requestsChart = c3.generate(json.requestsChart);
+                let requestsChart = c3.generate(json.requestsChart);
 
                 Object.keys(json.testSysloadCharts).forEach(test => {
-                    var chartConfig = json.testSysloadCharts[test];
-                    var $article = document.importNode(document.getElementById( 'template-article-test-sysload' ).content, true).childNodes;
+                    let chartConfig = json.testSysloadCharts[test];
+                    let $article = document.importNode(document.getElementById( 'template-article-test-sysload' ).content, true).children[0];
                     document.querySelector( 'main' ).appendChild($article);
                     $article.id = 'test-' + test.toLowerCase().replace(/ /g, '-');
                     [].slice.call($article.children).find(c => c.nodeName == 'H2').textContent = test;
