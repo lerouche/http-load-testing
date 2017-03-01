@@ -29,8 +29,6 @@ $sqlSafeStrLen = mb_strlen(addcslashes($cookieValue, '%_'));
 $urlSafeStrLen = mb_strlen(rawurlencode($cookieValue));
 $xssSafeStrLen = mb_strlen(htmlspecialchars($cookieValue));
 
-$bcrypted = password_hash($cookieValue, PASSWORD_BCRYPT);
-
 header('Content-Type: text/plain');
 
 echo json_encode([
@@ -45,6 +43,5 @@ echo json_encode([
             'url' => $urlSafeStrLen,
             'xss' => $xssSafeStrLen,
         ],
-        'bcrypted' => $bcrypted,
     ],
 ]);

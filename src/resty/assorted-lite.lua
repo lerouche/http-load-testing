@@ -98,8 +98,6 @@ local xssSafeStrLen = UTF8.len(cookieValue:gsub("([&\"'<>])", function(c)
     end
 end))
 
-local bcrypted = Bcrypt.digest(cookieValue, 10)
-
 ngx.header['Content-Type'] = 'text/plain'
 
 ngx.say(JSON.encode({
@@ -114,6 +112,5 @@ ngx.say(JSON.encode({
             url = urlSafeStrLen,
             xss = xssSafeStrLen,
         },
-        bcrypted = bcrypted,
     },
 }))

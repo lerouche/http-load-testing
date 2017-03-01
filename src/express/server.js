@@ -99,6 +99,22 @@ if (cluster.isMaster) {
         database: 'loadtesting'
     });
 
+    app.get('/random-bytes', (req, res) => {
+        res.send(crypto.randomBytes(1024).toString('hex'));
+    });
+
+    app.get('/sha256', (req, res) => {
+        let hash = crypto.createHash('sha256');
+        hash.update(random_bytes(1024));
+        res.send(hash.digest('hex'));
+    });
+
+    app.get('/sha512', (req, res) => {
+        let hash = crypto.createHash('sha512');
+        hash.update(random_bytes(1024));
+        res.send(hash.digest('hex'));
+    });
+
     app.get('/split-str', (req, res) => {
         let cookieValue = [
             crypto.randomBytes(5).toString('hex'),
@@ -346,28 +362,20 @@ if (cluster.isMaster) {
             }
         });
 
-        bcrypt.hash(cookieValue, 10, (err, bcrypted) => {
-            if (err) {
-                res.status(500);
-                return;
-            }
-
-            res.type('text').send(JSON.stringify({
-                'error': 0,
-                'data': {
-                    'parts': cookieParts,
-                    'userId': userId,
-                    'packedInt': packedInt,
-                    'equals': equals,
-                    'safeStrLen': {
-                        'sql': sqlSafeStrLen,
-                        'url': urlSafeStrLen,
-                        'xss': xssSafeStrLen,
-                    },
-                    'bcrypted': bcrypted,
+        res.type('text').send(JSON.stringify({
+            'error': 0,
+            'data': {
+                'parts': cookieParts,
+                'userId': userId,
+                'packedInt': packedInt,
+                'equals': equals,
+                'safeStrLen': {
+                    'sql': sqlSafeStrLen,
+                    'url': urlSafeStrLen,
+                    'xss': xssSafeStrLen,
                 },
-            }));
-        });
+            },
+        }));
     });
 
     app.listen(1025);
