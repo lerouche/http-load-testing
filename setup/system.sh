@@ -19,6 +19,7 @@ sudo apt update
 sudo apt dist-upgrade -y
 
 sudo apt install -y \
+    bc \
     libreadline-dev \
     libncurses5-dev \
     libpcre3-dev \
