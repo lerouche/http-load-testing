@@ -372,7 +372,7 @@ let json = {
 };
 
 // Optimisation
-let jsonSerialised = JSON.stringify(json).replace(/null(,|])/, '$1');
+let jsonSerialised = JSON.stringify(json).replace(/null(,|])/g, '$1');
 if (!FileSystem.existsSync(__dirname + '/report-template.min.html')) {
     require(__dirname + '/minify-report-template.js');
 }
