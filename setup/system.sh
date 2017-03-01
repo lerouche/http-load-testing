@@ -19,74 +19,71 @@ sudo apt update
 sudo apt dist-upgrade -y
 
 sudo apt install -y \
-    bc \
-    libreadline-dev \
-    libncurses5-dev \
-    libpcre3-dev \
-    libssl-dev \
-    perl \
-    make \
-    build-essential \
-    mysql-server \
-    nodejs \
-    dstat \
-    unzip \
     autoconf \
     automake \
+    bc \
     binutils-dev \
     bison \
     build-essential \
     cmake \
+    dstat \
     g++ \
     gawk \
     git \
+    gperf \
+    libboost-context-dev \
     libboost-dev \
     libboost-filesystem-dev \
     libboost-program-options-dev \
     libboost-regex-dev \
     libboost-system-dev \
     libboost-thread-dev \
-    libboost-context-dev \
     libbz2-dev \
     libc-client-dev \
-    libldap2-dev \
     libc-client2007e-dev \
     libcap-dev \
     libcurl4-openssl-dev \
     libdwarf-dev \
+    libedit-dev \
     libelf-dev \
+    libevent-dev \
     libexpat-dev \
     libgd2-xpm-dev \
+    libgmp3-dev \
     libgoogle-glog-dev \
     libgoogle-perftools-dev \
+    libiberty-dev \
+    libiconv-hook-dev \
     libicu-dev \
+    libinotifytools0-dev \
     libjemalloc-dev \
+    libkrb5-dev \
+    libldap2-dev \
+    libmagickwand-dev \
     libmcrypt-dev \
     libmemcached-dev \
     libmysqlclient-dev \
     libncurses-dev \
+    libncurses5-dev \
+    libnotify-dev \
     libonig-dev \
     libpcre3-dev \
+    libpq-dev \
     libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
     libtbb-dev \
     libtool \
     libxml2-dev \
-    zlib1g-dev \
-    libevent-dev \
-    libmagickwand-dev \
-    libinotifytools0-dev \
-    libiconv-hook-dev \
-    libedit-dev \
-    libiberty-dev \
     libxslt1-dev \
-    ocaml-native-compilers \
-    libsqlite3-dev \
     libyaml-dev \
-    libgmp3-dev \
-    gperf \
-    libkrb5-dev \
-    libnotify-dev \
-    libpq-dev \
+    make \
+    mysql-server \
+    nodejs \
+    ocaml-native-compilers \
+    perl \
+    unzip \
+    zlib1g-dev \
 
 sudo mysql_secure_installation
 
