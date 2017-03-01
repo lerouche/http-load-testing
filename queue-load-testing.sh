@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 CPU_MAX_SPEED_MHZ=lscpu | awk '/max MHz/ {print $4}'
-CPU_MAX_SPEED_GHZ=$(($CPU_MAX_SPEED_MHZ / 1000))
+CPU_MAX_SPEED_GHZ="$(bc <<< "scale=2; $CPU_MAX_SPEED_MHZ / 1000")"
 CPU_CORE_COUNT=$(nproc --all)
 SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 SYSTEM_RAM_GB=$(($SYSTEM_RAM_KB / 1024 / 1024))

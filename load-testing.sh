@@ -155,6 +155,7 @@ done
 echo "timeStarted=$TIMESTAMP_STARTED" >> system.info
 echo "timeEnded=$(($(date +%s%N)/1000000))" >> system.info
 echo "cpuCores=$(nproc --all)" >> system.info
+echo "cpuMaxFreq=$(bc <<< "scale=2; "$(lscpu | awk '/max MHz/ {print $4}')" / 1000")" >> system.info
 echo "memory=$(free | awk '/^Mem:/{print $2}')" >> system.info
 echo "sleepDuration=$SLEEP_DURATION" >> system.info
 
@@ -170,3 +171,4 @@ echo
 node report-template/generate-report.js --name="$REPORT_NAME"
 
 exit 0
+v

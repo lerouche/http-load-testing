@@ -45,7 +45,7 @@ class ReportGenerator {
         let data = {};
         lines.forEach(line => {
             let parts = line.split('=');
-            data[parts[0]] = Number.parseInt(parts[1], 10);
+            data[parts[0]] = Number.parseFloat(parts[1]);
         });
         return this.systemInfo = data;
     }
