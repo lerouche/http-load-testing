@@ -26,7 +26,7 @@ local cookieValue = table.concat({
     random_bytes(5, "hex"),
     random_int(1, 4000000),
     ngx.encode_base64(random_bytes(20)),
-    rand(1, 100),
+    random_int(1, 100),
     os.time(),
     ("''&amp;&<script></script>-\"-'''% %a%0\0 \\\\\t\r\n"):rep(random_int(3, 30)),
 }, '$')

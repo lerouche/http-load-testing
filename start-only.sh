@@ -9,12 +9,14 @@ if [ ! -L "/tmp/mysql.sock" ]; then
     ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 fi
 
+DST="$(realpath dist/)"
+
 dist/apache/bin/httpd -k start -f "$DST/conf/apache.conf"
 
 dist/nginx/sbin/nginx -p "dist/" -c "conf/nginx.conf"
 
-dist/hhvm/bin/hhvm -m server -c "$(realpath dist/conf/hhvm.ini)" &
+dist/hhvm/bin/hhvm -m server -c "$DST/conf/hhvm.ini" &
 
-node dist/app/express/server.js --pid="$(realpath dist/logs)/express.pid" &
+node dist/app/express/server.js --pid="$DST/logs/express.pid" &
 
 exit 0

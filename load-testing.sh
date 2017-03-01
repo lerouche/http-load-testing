@@ -82,7 +82,7 @@ SUBJECTS[2]='HHVM'
 SUBJECTS[3]='OpenResty'
 
 SUBJECT_START[0]='node dist/app/express/server.js --pid=dist/logs/express.pid &'
-SUBJECT_START[1]='dist/apache/bin/httpd -k start -f dist/conf/apache.conf'
+SUBJECT_START[1]='dist/apache/bin/httpd -k start -f "$(realpath dist/conf/apache.conf)"'
 SUBJECT_START[2]='dist/hhvm/bin/hhvm -m server -c dist/conf/hhvm.ini &'
 SUBJECT_START[3]='dist/nginx/sbin/nginx -p dist/ -c conf/nginx.conf'
 

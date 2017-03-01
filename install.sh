@@ -21,6 +21,7 @@ SRC="$(realpath ./src/)"
 DST="$(realpath ./dist/)"
 rm -rf "$DST"
 mkdir -p "$DST"
+mkdir -p "$DST/app"
 mkdir -p "$DST/conf"
 mkdir -p "$DST/logs"
 
