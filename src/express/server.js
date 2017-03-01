@@ -131,7 +131,7 @@ if (cluster.isMaster) {
     });
 
     app.get('/utf8-strlen', (req, res) => {
-        res.send(String(crypto.randomBytes(1024).toString('utf8').length));
+        res.send(String(crypto.randomBytes(128).toString('utf8').length));
     });
 
     app.get('/bcrypt', (req, res) => {

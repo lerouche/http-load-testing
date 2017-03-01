@@ -11,4 +11,4 @@ local function random_bytes(size)
     return bytes
 end
 
-ngx.say(UTF8.len(random_bytes(1024)))
+ngx.say(UTF8.len(random_bytes(128)))

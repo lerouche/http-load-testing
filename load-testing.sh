@@ -69,15 +69,15 @@ TESTS[9]='sha256'
 TESTS[10]='random-bytes'
 TESTS[11]='sha512'
 
-TEST_N[0]=250000
-TEST_N[1]=250000
+TEST_N[0]=350000
+TEST_N[1]=350000
 TEST_N[2]=250000
-TEST_N[3]=150000
-TEST_N[4]=100000
+TEST_N[3]=175000
+TEST_N[4]=175000
 TEST_N[5]=200000
-TEST_N[6]=250000
-TEST_N[7]=5000
-TEST_N[8]=100000
+TEST_N[6]=350000
+TEST_N[7]=2500
+TEST_N[8]=250000
 TEST_N[9]=250000
 TEST_N[10]=250000
 TEST_N[11]=250000
@@ -138,9 +138,11 @@ do
         sleep 2 # Give some buffer room for system load data
 
         THIS_N_VAL=${TEST_N[$i]}
+        # There is no point exceeding the predefined n value, as that value is optimised
+        # to be the least value to give accurate results, so going over it would be inefficient
         THIS_CONCURRENCY_VAL=$((CONCURRENCY_ARG > THIS_N_VAL ? THIS_N_VAL : CONCURRENCY_ARG))
 
-        dist/apache/bin/ab -c $THIS_CONCURRENCY_VAL -n $THIS_N_VAL $KEEPALIVE_ARG -q -l -r -s 600 "$URL" &> "results/$TEST/$SUBJECT/benchmark.log"
+        dist/apache/bin/ab -c $THIS_CONCURRENCY_VAL -n $THIS_N_VAL $KEEPALIVE_ARG -q -l -r -s 86400 "$URL" &> "results/$TEST/$SUBJECT/benchmark.log"
 
         printf " done\n"
 
