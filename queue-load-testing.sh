@@ -5,14 +5,20 @@ set -e
 cd "$(dirname "$0")"
 
 CPU_MAX_SPEED_MHZ=lscpu | awk '/max MHz/ {print $4}'
-CPU_MAX_SPEED_GHZ="$(bc <<< "scale=2; $CPU_MAX_SPEED_MHZ / 1000")"
+if [[ -z "${CPU_MAX_SPEED_MHZ// }" ]]; then
+    CPU_MAX_SPEED_MHZ="$(lscpu | awk '/CPU MHz/ {print $3}')"
+fi
+CPU_MAX_SPEED_GHZ="Unknown"
+if [[ ! -z "${CPU_MAX_SPEED_MHZ// }" ]]; then
+    CPU_MAX_SPEED_GHZ="$(bc <<< "scale=2; $CPU_MAX_SPEED_MHZ / 1000")"
+fi
 CPU_CORE_COUNT=$(nproc --all)
 SYSTEM_RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 SYSTEM_RAM_GB=$(($SYSTEM_RAM_KB / 1024 / 1024))
 
 KEEPALIVE=false
 SLEEP_DURATION="10"
-REPORT_NAME="http-load-testing $CPU_CORE_COUNT-core $CPU_MAX_SPEED_GHZ, $SYSTEM_RAM_GB GB RAM"
+REPORT_NAME="http-load-testing $CPU_CORE_COUNT-core $CPU_MAX_SPEED_GHZ GHz, $SYSTEM_RAM_GB GB RAM"
 OUTPUT_DIR="$HOME/http-load-testing-reports/"
 
 TESTS=()
