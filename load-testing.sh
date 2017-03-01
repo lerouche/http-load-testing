@@ -74,7 +74,7 @@ TEST_N[4]=100000
 TEST_N[5]=5000
 TEST_N[6]=250000
 TEST_N[7]=5000
-TEST_N[8]=5000
+TEST_N[8]=100000
 
 SUBJECTS[0]='Express'
 SUBJECTS[1]='PHP'
@@ -152,11 +152,18 @@ do
     sleep 5 # Allow time for server to shut down and clean up
 done
 
+CPU_FREQ_MHZ="$(lscpu | awk '/max MHz/ {print $4}')"
+if [[ -z "${CPU_FREQ_MHZ// }" ]]; then
+    CPU_FREQ_MHZ="$(lscpu | awk '/CPU MHz/ {print $3}')"
+fi
+
 echo "timeStarted=$TIMESTAMP_STARTED" >> system.info
 echo "timeEnded=$(($(date +%s%N)/1000000))" >> system.info
 echo "cpuCores=$(nproc --all)" >> system.info
-echo "cpuMaxFreq=$(bc <<< "scale=2; "$(lscpu | awk '/max MHz/ {print $4}')" / 1000")" >> system.info
-echo "memory=$(free | awk '/^Mem:/{print $2}')" >> system.info
+if [[ ! -z "${CPU_FREQ_MHZ// }" ]]; then
+    echo "cpuMaxFreq=$(bc <<< "scale=2; $CPU_FREQ_MHZ / 1000")" >> system.info
+fi
+echo "memory=$(($(free | awk '/^Mem:/{print $2}') / 1024 / 1024))" >> system.info
 echo "sleepDuration=$SLEEP_DURATION" >> system.info
 
 echo

@@ -53,11 +53,11 @@
                             <dd></dd>
                             <dt data-key="timeEnded">Ended</dt>
                             <dd></dd>
-                            <dt data-key="cpuMaxFreq">CPU maximum frequency (GHz)</dt>
-                            <dd></dd>
+                            <dt data-key="cpuMaxFreq">CPU maximum frequency</dt>
+                            <dd>Could not find out</dd>
                             <dt data-key="cpuCores">CPU cores</dt>
                             <dd></dd>
-                            <dt data-key="memory">Memory (KiB)</dt>
+                            <dt data-key="memory">Memory</dt>
                             <dd></dd>
                             <dt data-key="sleepDuration">Sleep duration between tests</dt>
                             <dd></dd>
@@ -210,17 +210,27 @@
                 [].slice.call(document.querySelectorAll( '#details-list > dt' )).forEach(elem => {
                     let key = elem.dataset.key;
                     let text = json.sysinfo[key];
-                    switch (key) {
-                        case 'sleepDuration':
-                            text += ' seconds';
-                            break;
+                    if (text != undefined) {
+                        switch (key) {
+                            case 'sleepDuration':
+                                text += ' seconds';
+                                break;
 
-                        case 'timeStarted':
-                        case 'timeEnded':
-                            text = new Date(text);
-                            break;
+                            case 'timeStarted':
+                            case 'timeEnded':
+                                text = new Date(text);
+                                break;
+
+                            case 'cpuMaxFreq':
+                                text += ' GHz';
+                                break;
+
+                            case 'memory':
+                                text += ' GiB';
+                                break;
+                        }
+                        elem.nextElementSibling.textContent = text;
                     }
-                    elem.nextElementSibling.textContent = text;
                 });
 
                 json.requestsChart.bindto = '#requests-chart';
