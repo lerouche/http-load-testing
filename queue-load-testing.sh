@@ -19,7 +19,7 @@ SYSTEM_RAM_GB=$(($SYSTEM_RAM_KB / 1024 / 1024))
 KEEPALIVE=false
 SLEEP_DURATION="10"
 REPORT_NAME="http-load-testing $CPU_CORE_COUNT-core $CPU_MAX_SPEED_GHZ GHz, $SYSTEM_RAM_GB GB RAM"
-OUTPUT_DIR="$HOME/http-load-testing-reports/"
+OUTPUT_DIR="$HOME/http-load-testing-reports/" # Trailing slash is OK as this will be realpath-ed
 
 TESTS=()
 
@@ -67,7 +67,7 @@ if [ "$KEEPALIVE" = true ]; then
     for (( j=0; j<=$(( ${#TESTS[*]} - 1 )); j++ ))
     do
         TEST_C_VAL="${TESTS[$j]}"
-        ./load-testing -k -c "$TEST_C_VAL" -s "$SLEEP_DURATION" -n "$REPORT_NAME (${TEST_C_VAL}c k)"
+        ./load-testing.sh -k -c "$TEST_C_VAL" -s "$SLEEP_DURATION" -n "$REPORT_NAME (${TEST_C_VAL}c k)"
         mv report.html "$OUTPUT_DIR/$REPORT_NAME-${TEST_C_VAL}c-k.html"
     done
 fi
