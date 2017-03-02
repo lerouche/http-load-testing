@@ -23,7 +23,6 @@ cd "$SRC/nginx/"
 tar -zvxf openresty-1.11.2.2.tar.gz
 rm -rf openresty/
 mv openresty-1.11.2.2/ openresty/
-cp patches/*.c openresty/bundle/nginx-1.11.2/src/http/
 
 # Build Nginx
 
