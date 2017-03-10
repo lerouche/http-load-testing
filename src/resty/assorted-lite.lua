@@ -2,7 +2,6 @@ local Random = require('resty.random')
 local String = require('resty.string')
 local JSON = require('cjson')
 local Hmac = require('hmac')
-local Bcrypt = require('bcrypt')
 local Bit = require('bit')
 local UTF8 = require('lua-utf8')
 

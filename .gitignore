@@ -12,7 +12,6 @@ node_modules/
 
 /src/nginx/openresty/
 /src/nginx/luarocks/
-/src/nginx/lib/*/
 
 /report-template/report-template.min.html
 *.tmp

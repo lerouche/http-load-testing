@@ -100,16 +100,6 @@ rm -rf luarocks/
 
 LUA_MODULES_DIR="$DST/site/lualib"
 
-cd lib/
-
-tar -zvxf LuaBitOp-1.0.2.tar.gz
-cd LuaBitOp-1.0.2
-sed -i "s%^INCLUDES= -I.*%INCLUDES= -I$LUA_INCDIR%" Makefile
-make
-mv bit.so "$LUA_MODULES_DIR"
-cd ..
-rm -rf LuaBitOp-1.0.2
-
 wget "https://raw.githubusercontent.com/jkeys089/lua-resty-hmac/master/lib/resty/hmac.lua" -O "$LUA_MODULES_DIR/hmac.lua"
 
 "$DST/luarocks/bin/luarocks" install bcrypt
