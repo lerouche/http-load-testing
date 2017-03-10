@@ -2,11 +2,6 @@
 
 set -e
 
-# Get CPU cores
-
-CPU_CORE_COUNT=$(nproc --all)
-echo "CPU cores: $CPU_CORE_COUNT"
-
 # Remember script directory
 
 ORIG_DIR="$(realpath "$(dirname "$0")")"
