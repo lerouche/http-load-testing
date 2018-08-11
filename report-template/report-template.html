@@ -1,272 +1,277 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Loading...</title>
+<head>
+  <meta charset="utf-8">
+  <title>Loading...</title>
 
-        <style>
-            <ZC-IMPORT[node_modules/c3/c3.min.css]>
-            <ZC-IMPORT[./report-template.css]>
-        </style>
+  <style>
+    <ZC-IMPORT[node_modules/c3/c3.min.css]>
+    <ZC-IMPORT[./report-template.css]>
+  </style>
 
-        <script src="node_modules/d3/d3.min.js"></script>
-        <script src="node_modules/c3/c3.min.js"></script>
-    </head>
+  <script src="node_modules/d3/d3.min.js"></script>
+  <script src="node_modules/c3/c3.min.js"></script>
+</head>
 
-    <body>
-        <header>
-            <h1><span>Load testing on</span></h1>
-        </header>
+<body>
+<header>
+  <h1><span>Load testing on</span></h1>
+</header>
 
-        <nav>
-            <ul id="nav-list">
-                <li data-id="overview">Overview</li>
-                <li data-id="requests">Requests</li>
-                <li id="nav-tests-list-container"><span>Test</span><ul id="nav-tests-list"></ul></li>
-                <li data-id="system-load">System load</li>
-            </ul>
-        </nav>
+<nav>
+  <ul id="nav-list">
+    <li data-id="overview">Overview</li>
+    <li data-id="requests">Requests</li>
+    <li id="nav-tests-list-container"><span>Test</span>
+      <ul id="nav-tests-list"></ul>
+    </li>
+    <li data-id="system-load">System load</li>
+  </ul>
+</nav>
 
-        <main>
-            <article id="overview">
-                <h2>Overview</h2>
+<main>
+  <article id="overview">
+    <h2>Overview</h2>
 
-                <div class="flex">
-                    <section>
-                        <h3>Errors</h3>
-                        <table id="errors-table">
-                            <thead>
-                                <tr>
-                                    <th>Test</th>
-                                    <th>Subject</th>
-                                    <th>Errors</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </section>
+    <div class="flex">
+      <section>
+        <h3>Errors</h3>
+        <table id="errors-table">
+          <thead>
+          <tr>
+            <th>Test</th>
+            <th>Subject</th>
+            <th>Errors</th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
 
-                    <section>
-                        <h3>Details</h3>
-                        <dl id="details-list">
-                            <dt data-key="timeStarted">Started</dt>
-                            <dd></dd>
-                            <dt data-key="timeEnded">Ended</dt>
-                            <dd></dd>
-                            <dt data-key="cpuMaxFreq">CPU maximum frequency</dt>
-                            <dd>Could not find out</dd>
-                            <dt data-key="cpuCores">CPU cores</dt>
-                            <dd></dd>
-                            <dt data-key="memory">Memory</dt>
-                            <dd></dd>
-                            <dt data-key="sleepDuration">Sleep duration between tests</dt>
-                            <dd></dd>
-                        </dl>
-                    </section>
-                </div>
-            </article>
+      <section>
+        <h3>Details</h3>
+        <dl id="details-list">
+          <dt data-key="timeStarted">Started</dt>
+          <dd></dd>
+          <dt data-key="timeEnded">Ended</dt>
+          <dd></dd>
+          <dt data-key="cpuMaxFreq">CPU maximum frequency</dt>
+          <dd>Could not find out</dd>
+          <dt data-key="cpuCores">CPU cores</dt>
+          <dd></dd>
+          <dt data-key="memory">Memory</dt>
+          <dd></dd>
+          <dt data-key="sleepDuration">Sleep duration between tests</dt>
+          <dd></dd>
+        </dl>
+      </section>
+    </div>
+  </article>
 
-            <article id="requests">
-                <h2>Requests</h2>
-                <div id="requests-chart"></div>
-            </article>
+  <article id="requests">
+    <h2>Requests</h2>
+    <div id="requests-chart"></div>
+  </article>
 
-            <template id="template-article-test-sysload">
-                <article>
-                    <h2></h2>
+  <template id="template-article-test-sysload">
+    <article>
+      <h2></h2>
 
-                    <section>
-                        <h3>CPU</h3>
-                        <div class="test-sysload-cpu-chart"></div>
-                    </section>
+      <section>
+        <h3>CPU</h3>
+        <div class="test-sysload-cpu-chart"></div>
+      </section>
 
-                    <section>
-                        <h3>Memory</h3>
-                        <div class="test-sysload-memory-chart"></div>
-                    </section>
-                </article>
-            </template>
+      <section>
+        <h3>Memory</h3>
+        <div class="test-sysload-memory-chart"></div>
+      </section>
+    </article>
+  </template>
 
-            <article id="system-load">
-                <h2>System load</h2>
+  <article id="system-load">
+    <h2>System load</h2>
 
-                <section>
-                    <h3>CPU (%)</h3>
-                    <div id="total-sysload-cpu-chart"></div>
-                </section>
+    <section>
+      <h3>CPU (%)</h3>
+      <div id="total-sysload-cpu-chart"></div>
+    </section>
 
-                <section>
-                    <h3>Memory (MiB)</h3>
-                    <div id="total-sysload-memory-chart"></div>
-                </section>
-            </article>
-        </main>
+    <section>
+      <h3>Memory (MiB)</h3>
+      <div id="total-sysload-memory-chart"></div>
+    </section>
+  </article>
+</main>
 
-        <script>
-            (undefined => {
-                "use strict";
+<script>
+  (undefined => {
+    "use strict";
 
-                Element.prototype.matches = Element.prototype.matches ||
-                    Element.prototype.matchesSelector ||
-                    Element.prototype.mozMatchesSelector ||
-                    Element.prototype.msMatchesSelector ||
-                    Element.prototype.oMatchesSelector ||
-                    Element.prototype.webkitMatchesSelector;
+    Element.prototype.matches = Element.prototype.matches ||
+                                Element.prototype.matchesSelector ||
+                                Element.prototype.mozMatchesSelector ||
+                                Element.prototype.msMatchesSelector ||
+                                Element.prototype.oMatchesSelector ||
+                                Element.prototype.webkitMatchesSelector;
 
-                let testSysloadCharts = [];
-                let totalSysloadCharts = [];
+    let testSysloadCharts = [];
+    let totalSysloadCharts = [];
 
-                function resizeCharts() {
-                    requestsChart.resize({
-                        height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 - 50, /* 50 is approximate for the article title's height + margin */
-                        width: document.documentElement.clientWidth - 40,
-                    });
-                    testSysloadCharts.forEach(chart => {
-                        chart.resize({
-                            width: document.documentElement.clientWidth - 40,
-                        });
-                    });
-                    totalSysloadCharts.forEach(chart => {
-                        chart.resize({
-                            width: document.documentElement.clientWidth - 40,
-                        });
-                    });
-                }
+    function resizeCharts () {
+      requestsChart.resize({
+        height: document.documentElement.clientHeight - 45 - 45 - 20 - 20 -
+                50, /* 50 is approximate for the article title's height + margin */
+        width: document.documentElement.clientWidth - 40,
+      });
+      testSysloadCharts.forEach(chart => {
+        chart.resize({
+          width: document.documentElement.clientWidth - 40,
+        });
+      });
+      totalSysloadCharts.forEach(chart => {
+        chart.resize({
+          width: document.documentElement.clientWidth - 40,
+        });
+      });
+    }
 
-                let json = GENERATED_REPORT_DATA_JSON;
+    let json = GENERATED_REPORT_DATA_JSON;
 
-                let isArrOrObj = function(thing) { return thing && (Array.isArray(thing) || typeof thing == 'object') };
-                (function fillInJsonArrays(arr) {
-                    if (Array.isArray(arr)) {
-                        for (let i = 0; i < arr.length; i++) {
-                            if (arr[i] === undefined) {
-                                arr[i] = null;
-                            } else if (isArrOrObj(arr[i])) {
-                                fillInJsonArrays(arr[i]);
-                            }
-                        }
-                    } else {
-                        Object.keys(arr).forEach(prop => {
-                            let val = arr[prop];
-                            if (isArrOrObj(val)) {
-                                fillInJsonArrays(val);
-                            }
-                        });
-                    }
-                })(json);
+    let isArrOrObj = function (thing) {
+      return thing && (Array.isArray(thing) || typeof thing == "object");
+    };
+    (function fillInJsonArrays (arr) {
+      if (Array.isArray(arr)) {
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] === undefined) {
+            arr[i] = null;
+          } else if (isArrOrObj(arr[i])) {
+            fillInJsonArrays(arr[i]);
+          }
+        }
+      } else {
+        Object.keys(arr).forEach(prop => {
+          let val = arr[prop];
+          if (isArrOrObj(val)) {
+            fillInJsonArrays(val);
+          }
+        });
+      }
+    })(json);
 
-                document.title = 'Results for ' + json.sysinfo.name;
-                document.querySelector( 'h1' ).appendChild(document.createTextNode(' ' + json.sysinfo.name));
+    document.title = "Results for " + json.sysinfo.name;
+    document.querySelector("h1").appendChild(document.createTextNode(" " + json.sysinfo.name));
 
-                json.tests.forEach(testName => {
-                    let li = document.createElement('li');
-                    li.dataset.id = "test-" + testName.toLowerCase().replace(/ /g, '-');
-                    li.textContent = testName;
-                    document.getElementById( 'nav-tests-list' )
-                        .appendChild(li);
-                });
+    json.tests.forEach(testName => {
+      let li = document.createElement("li");
+      li.dataset.id = "test-" + testName.toLowerCase().replace(/ /g, "-");
+      li.textContent = testName;
+      document.getElementById("nav-tests-list")
+        .appendChild(li);
+    });
 
-                document.getElementById( 'nav-list' )
-                    .addEventListener('click', e => {
-                        let elem = e.target;
-                        if (elem.matches('li[data-id]')) {
-                            if (!elem.classList.contains('active')) {
-                                location.hash = '#' + elem.dataset.id;
-                                [document.querySelector( '#nav-list li.active' ), elem].forEach(e => e.classList.toggle('active'));
-                            }
-                        }
-                    });
+    document.getElementById("nav-list")
+      .addEventListener("click", e => {
+        let elem = e.target;
+        if (elem.matches("li[data-id]")) {
+          if (!elem.classList.contains("active")) {
+            location.hash = "#" + elem.dataset.id;
+            [document.querySelector("#nav-list li.active"), elem].forEach(e => e.classList.toggle("active"));
+          }
+        }
+      });
 
-                document.getElementById( 'nav-tests-list-container' )
-                    .addEventListener('click', () => {
-                        document.getElementById( 'nav-tests-list' ).classList.toggle('open');
-                    });
+    document.getElementById("nav-tests-list-container")
+      .addEventListener("click", () => {
+        document.getElementById("nav-tests-list").classList.toggle("open");
+      });
 
-                Object.keys(json.errors).forEach(test => {
-                    let $rows = Object.keys(json.errors[test]).map(subject => {
-                        let errorsCount = json.errors[test][subject];
-                        let dom = document.createElement('tr');
+    Object.keys(json.errors).forEach(test => {
+      let $rows = Object.keys(json.errors[test]).map(subject => {
+        let errorsCount = json.errors[test][subject];
+        let dom = document.createElement("tr");
 
-                        [subject, {className: errorsCount > 0 ? 'red' : '', text: errorsCount}].forEach(tddata => {
-                            let td = document.createElement('td');
-                            if (typeof tddata == 'string') {
-                                td.textContent = tddata;
-                            } else {
-                                td.textContent = tddata.text;
-                                td.className = tddata.className;
-                            }
-                            dom.appendChild(td);
-                        });
-                        return dom;
-                    });
-                    let prepend = document.createElement('td');
-                    prepend.rowSpan = $rows.length;
-                    prepend.textContent = test;
-                    $rows[0].insertBefore(prepend, $rows[0].childNodes[0] || null);
+        [subject, {className: errorsCount > 0 ? "red" : "", text: errorsCount}].forEach(tddata => {
+          let td = document.createElement("td");
+          if (typeof tddata == "string") {
+            td.textContent = tddata;
+          } else {
+            td.textContent = tddata.text;
+            td.className = tddata.className;
+          }
+          dom.appendChild(td);
+        });
+        return dom;
+      });
+      let prepend = document.createElement("td");
+      prepend.rowSpan = $rows.length;
+      prepend.textContent = test;
+      $rows[0].insertBefore(prepend, $rows[0].childNodes[0] || null);
 
-                    $rows.forEach($row => document.querySelector( '#errors-table > tbody' ).appendChild($row));
-                });
+      $rows.forEach($row => document.querySelector("#errors-table > tbody").appendChild($row));
+    });
 
-                [].slice.call(document.querySelectorAll( '#details-list > dt' )).forEach(elem => {
-                    let key = elem.dataset.key;
-                    let text = json.sysinfo[key];
-                    if (text != undefined) {
-                        switch (key) {
-                            case 'sleepDuration':
-                                text += ' seconds';
-                                break;
+    [].slice.call(document.querySelectorAll("#details-list > dt")).forEach(elem => {
+      let key = elem.dataset.key;
+      let text = json.sysinfo[key];
+      if (text != undefined) {
+        switch (key) {
+        case "sleepDuration":
+          text += " seconds";
+          break;
 
-                            case 'timeStarted':
-                            case 'timeEnded':
-                                text = new Date(text);
-                                break;
+        case "timeStarted":
+        case "timeEnded":
+          text = new Date(text);
+          break;
 
-                            case 'cpuMaxFreq':
-                                text += ' GHz';
-                                break;
+        case "cpuMaxFreq":
+          text += " GHz";
+          break;
 
-                            case 'memory':
-                                text += ' GiB';
-                                break;
-                        }
-                        elem.nextElementSibling.textContent = text;
-                    }
-                });
+        case "memory":
+          text += " GiB";
+          break;
+        }
+        elem.nextElementSibling.textContent = text;
+      }
+    });
 
-                json.requestsChart.bindto = '#requests-chart';
-                let requestsChart = c3.generate(json.requestsChart);
+    json.requestsChart.bindto = "#requests-chart";
+    let requestsChart = c3.generate(json.requestsChart);
 
-                Object.keys(json.testSysloadCharts).forEach(test => {
-                    let chartConfig = json.testSysloadCharts[test];
-                    let $article = document.importNode(document.getElementById( 'template-article-test-sysload' ).content, true).children[0];
-                    document.querySelector( 'main' ).appendChild($article);
-                    $article.id = 'test-' + test.toLowerCase().replace(/ /g, '-');
-                    [].slice.call($article.children).find(c => c.nodeName == 'H2').textContent = test;
+    Object.keys(json.testSysloadCharts).forEach(test => {
+      let chartConfig = json.testSysloadCharts[test];
+      let $article = document.importNode(document.getElementById("template-article-test-sysload").content, true).children[0];
+      document.querySelector("main").appendChild($article);
+      $article.id = "test-" + test.toLowerCase().replace(/ /g, "-");
+      [].slice.call($article.children).find(c => c.nodeName == "H2").textContent = test;
 
-                    testSysloadCharts.push(c3.generate(Object.assign(chartConfig.cpu, {
-                        bindto: $article.querySelector('.test-sysload-cpu-chart')
-                    })));
+      testSysloadCharts.push(c3.generate(Object.assign(chartConfig.cpu, {
+        bindto: $article.querySelector(".test-sysload-cpu-chart")
+      })));
 
-                    testSysloadCharts.push(c3.generate(Object.assign(chartConfig.memory, {
-                        bindto: $article.querySelector('.test-sysload-memory-chart')
-                    })));
-                });
+      testSysloadCharts.push(c3.generate(Object.assign(chartConfig.memory, {
+        bindto: $article.querySelector(".test-sysload-memory-chart")
+      })));
+    });
 
-                totalSysloadCharts.push(c3.generate(Object.assign(json.totalCpuChart, {
-                    bindto: '#total-sysload-cpu-chart',
-                })));
+    totalSysloadCharts.push(c3.generate(Object.assign(json.totalCpuChart, {
+      bindto: "#total-sysload-cpu-chart",
+    })));
 
-                totalSysloadCharts.push(c3.generate(Object.assign(json.totalMemoryChart, {
-                    bindto: '#total-sysload-memory-chart',
-                })));
+    totalSysloadCharts.push(c3.generate(Object.assign(json.totalMemoryChart, {
+      bindto: "#total-sysload-memory-chart",
+    })));
 
-                location.hash = '#overview';
-                document.querySelector( '#nav-list > li[data-id="overview"]' ).classList.add('active');
+    location.hash = "#overview";
+    document.querySelector("#nav-list > li[data-id=\"overview\"]").classList.add("active");
 
-                window.addEventListener('resize', resizeCharts);
-                window.addEventListener('orientationchange', resizeCharts);
-                setTimeout(resizeCharts, 1000);
-            })();
-        </script>
-    </body>
+    window.addEventListener("resize", resizeCharts);
+    window.addEventListener("orientationchange", resizeCharts);
+    setTimeout(resizeCharts, 1000);
+  })();
+</script>
+</body>
 </html>
