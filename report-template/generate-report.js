@@ -4,22 +4,16 @@ const FileSystem = require("fs");
 const Path = require("path");
 
 class ReportGenerator {
-  static sortChartColumns (chartColumns) {
+  static sortChartColumns(chartColumns) {
     chartColumns.sort((colA, colB) => {
       let a = ReportGenerator.CHART_COLUMN_ORDER.indexOf(colA[0]);
       let b = ReportGenerator.CHART_COLUMN_ORDER.indexOf(colB[0]);
-      if (a < b) {
-        return -1;
-      } else if (a == b) {
-        return 0;
-      } else {
-        return 1;
-      }
+      return a - b;
     });
     return chartColumns;
   }
 
-  constructor (rootPath) {
+  constructor(rootPath) {
     this.rootPath = rootPath;
 
     this.systemInfo = undefined;
@@ -36,7 +30,7 @@ class ReportGenerator {
     this.totalSysloadCharts = undefined;
   }
 
-  getSystemInfo () {
+  getSystemInfo() {
     if (this.systemInfo) {
       return this.systemInfo;
     }
@@ -45,15 +39,15 @@ class ReportGenerator {
       .split(/[\r\n]+/)
       .map(line => line.trim())
       .filter(line => !!line);
-    let data = {};
-    lines.forEach(line => {
+    let data = lines.reduce((data, line) => {
       let parts = line.split("=");
       data[parts[0]] = Number.parseFloat(parts[1]);
-    });
+      return data;
+    }, {});
     return this.systemInfo = data;
   }
 
-  getReportName () {
+  getReportName() {
     if (this.reportName) {
       return this.reportName;
     }
@@ -61,7 +55,7 @@ class ReportGenerator {
     return this.reportName = process.argv.slice(2).find(arg => /^--name=/.test(arg)).slice(7).trim();
   }
 
-  getTestsList () {
+  getTestsList() {
     if (this.testsList) {
       return this.testsList;
     }
@@ -71,7 +65,7 @@ class ReportGenerator {
     return this.testsList = dirlist;
   }
 
-  getSubjectsList () {
+  getSubjectsList() {
     if (this.subjectsList) {
       return this.subjectsList;
     }
@@ -104,7 +98,7 @@ class ReportGenerator {
     return this.subjectsList = Array.from(subjects);
   }
 
-  getSystemLoadData (test, subject) {
+  getSystemLoadData(test, subject) {
     if (!this.systemLoadData[test]) {
       this.systemLoadData[test] = {};
     }
@@ -135,7 +129,7 @@ class ReportGenerator {
     return this.systemLoadData[test][subject] = systemLoadData;
   }
 
-  getBenchmarkData (test, subject) {
+  getBenchmarkData(test, subject) {
     if (!this.benchmarkData[test]) {
       this.benchmarkData[test] = {};
     }
@@ -162,7 +156,7 @@ class ReportGenerator {
     };
   }
 
-  generateRequestsChart () {
+  generateRequestsChart() {
     if (this.requestsChart) {
       return this.requestsChart;
     }
@@ -211,7 +205,7 @@ class ReportGenerator {
     };
   }
 
-  generateTestSysloadChart (test) {
+  generateTestSysloadChart(test) {
     if (this.testSysloadCharts[test]) {
       return this.testSysloadCharts[test];
     }
@@ -272,7 +266,7 @@ class ReportGenerator {
     };
   }
 
-  generateTotalSysloadCharts () {
+  generateTotalSysloadCharts() {
     if (this.totalSysloadCharts) {
       return this.totalSysloadCharts;
     }
@@ -300,7 +294,7 @@ class ReportGenerator {
       }
 
       cpuCol[Math.floor(data.timestamp / 1000) - Math.floor(allSysloadData[0].timestamp / 1000) +
-             1] = data.totalCpuUsage;
+        1] = data.totalCpuUsage;
 
       let memCol = memoryChartColumns.find(col => col[0] == data.subject);
       if (!memCol) {
