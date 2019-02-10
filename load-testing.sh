@@ -14,12 +14,6 @@ if ! hash dstat 2>/dev/null; then
     exit 1
 fi
 
-# BUGFIX: HHVM doesn't use proper sock path despite being compiled with it and set 3 times in its config...
-if [ ! -L "/tmp/mysql.sock" ]; then
-    ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
-fi
-
-
 KEEPALIVE_ARG=""
 CONCURRENCY_ARG="1000"
 SLEEP_DURATION=10
@@ -186,4 +180,3 @@ echo
 node report-template/generate-report.js --name="$REPORT_NAME"
 
 exit 0
-v
